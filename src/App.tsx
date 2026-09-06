@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { Navbar } from './components/Navbar';
+import { RoleWorkspaceBar } from './components/RoleWorkspaceBar';
+import { AuthScreen } from './components/AuthScreen';
+import { AddHospitalModal } from './components/AddHospitalModal';
 import { TriageView } from './components/TriageView';
 import { FacilityRoutingView } from './components/FacilityRoutingView';
 import { ReferralHandshakeView } from './components/ReferralHandshakeView';
@@ -21,9 +24,11 @@ import {
 } from 'lucide-react';
 
 const MainApp: React.FC = () => {
-  const { user, t } = useAuth();
+  const { user, loading, t } = useAuth();
   const [activeTab, setActiveTab] = useState('triage');
   const [scenariosOpen, setScenariosOpen] = useState(false);
+  const [addHospitalOpen, setAddHospitalOpen] = useState(false);
+  const [facilityKey, setFacilityKey] = useState(0);
 
   // Routing navigation pre-fill state
   const [routingUrgency, setRoutingUrgency] = useState<TriageUrgency>('RED');
@@ -58,11 +63,35 @@ const MainApp: React.FC = () => {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-slate-900 flex items-center justify-center text-teal-400">
+        <div className="flex flex-col items-center gap-3">
+          <Activity className="w-8 h-8 animate-spin" />
+          <span className="text-sm font-medium text-slate-300">
+            CareGrid Tamil Nadu Loading...
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <AuthScreen />;
+  }
+
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans text-slate-900 antialiased selection:bg-teal-100 selection:text-teal-900">
       {/* Top Navigation */}
       <Navbar
         onOpenScenarios={() => setScenariosOpen(true)}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      />
+
+      {/* Role-Based Workspace Banner */}
+      <RoleWorkspaceBar
+        onOpenAddHospital={() => setAddHospitalOpen(true)}
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
@@ -75,9 +104,11 @@ const MainApp: React.FC = () => {
 
         {activeTab === 'routing' && (
           <FacilityRoutingView
+            key={facilityKey}
             initialUrgency={routingUrgency}
             initialSpecialty={routingSpecialty}
             onInitiateReferral={handleInitiateReferral}
+            onOpenAddHospital={() => setAddHospitalOpen(true)}
           />
         )}
 
@@ -104,6 +135,13 @@ const MainApp: React.FC = () => {
         onSelectScenario={handleSelectScenario}
       />
 
+      {/* Add Hospital Modal */}
+      <AddHospitalModal
+        isOpen={addHospitalOpen}
+        onClose={() => setAddHospitalOpen(false)}
+        onFacilityAdded={() => setFacilityKey(k => k + 1)}
+      />
+
       {/* Public Healthcare Platform Footer */}
       <footer className="bg-white border-t border-slate-200 py-6 px-4 text-xs text-slate-500">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
@@ -112,7 +150,7 @@ const MainApp: React.FC = () => {
               CG
             </div>
             <span>
-              <strong>CareGrid</strong> — National Health Mission Rural Care-Coordination Architecture
+              <strong>CareGrid</strong> — National Health Mission Rural Care-Coordination Architecture (Tamil Nadu)
             </span>
           </div>
 

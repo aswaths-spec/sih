@@ -66,7 +66,7 @@ export interface HealthWorker {
   id: string;
   userId: string;
   name: string;
-  workerType: 'ASHA' | 'ANM' | 'CHO' | 'MPW';
+  workerType: 'ASHA' | 'ANM' | 'CHO' | 'MPW' | 'VHN';
   assignedVillage: string;
   assignedDistrict: string;
   facilityId?: string;
@@ -182,13 +182,21 @@ export interface Appointment {
   appointmentNo: string;
   tokenNumber: string;
   patientId: string;
+  patientName?: string;
   facilityId: string;
   facilityName: string;
-  referralId?: string;
-  scheduledFor: string;
-  status: AppointmentStatus;
   department: string;
-  estimatedWaitMinutes: number;
+  doctorId?: string;
+  doctorName?: string;
+  scheduledFor?: string;
+  scheduledDate?: string;
+  timeSlot?: string;
+  status: AppointmentStatus;
+  priority?: string;
+  queuePosition?: number;
+  estimatedWaitMinutes?: number;
+  estimatedWaitTimeMin?: number;
+  referralId?: string;
   notes?: string;
   createdAt: string;
 }
@@ -207,6 +215,7 @@ export interface CareJourneyStep {
 export interface CareJourney {
   id: string;
   patientId: string;
+  patientName?: string;
   referralId?: string;
   title: string;
   overallStatus: 'ACTIVE' | 'COMPLETED' | 'DELAYED';
@@ -229,13 +238,14 @@ export interface CareGap {
     | 'HIGH_RISK_UNREVIEWED';
   severity: 'CRITICAL' | 'HIGH' | 'MODERATE';
   dueDate: string;
-  detectedDate: string;
+  detectedDate?: string;
   responsibleWorkerId?: string;
   responsibleWorkerName?: string;
   status: CareGapStatus;
   actionTaken?: string;
   resolutionNotes?: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface FollowUp {

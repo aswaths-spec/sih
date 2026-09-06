@@ -36,6 +36,8 @@ export const VoiceInputButton: React.FC<VoiceInputButtonProps> = ({
         recognition.lang = 'hi-IN';
       } else if (language === 'mr') {
         recognition.lang = 'mr-IN';
+      } else if (language === 'ta') {
+        recognition.lang = 'ta-IN';
       } else {
         recognition.lang = 'en-IN';
       }

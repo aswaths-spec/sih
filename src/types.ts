@@ -55,11 +55,19 @@ export interface Patient {
   medications: string[];
 }
 
+export type FacilityType =
+  | 'PHC'
+  | 'CHC'
+  | 'Sub-District Hospital'
+  | 'District Hospital'
+  | 'Specialist Medical College'
+  | 'Private Empanelled';
+
 export interface Facility {
   id: string;
   name: string;
-  type: 'PHC' | 'CHC' | 'Sub-District Hospital' | 'District Hospital' | 'Specialist Medical College';
-  category: 'Public' | 'Trust' | 'Associated';
+  type: FacilityType;
+  category: 'Public' | 'Private' | 'Trust' | 'Associated';
   latitude: number;
   longitude: number;
   address: string;
@@ -152,6 +160,7 @@ export interface Appointment {
   appointmentNo: string;
   tokenNumber: string;
   patientId: string;
+  patientName?: string;
   facilityId: string;
   facilityName: string;
   referralId?: string;
@@ -177,6 +186,7 @@ export interface CareJourneyStep {
 export interface CareJourney {
   id: string;
   patientId: string;
+  patientName?: string;
   referralId?: string;
   title: string;
   overallStatus: 'ACTIVE' | 'COMPLETED' | 'DELAYED';

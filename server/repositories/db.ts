@@ -102,7 +102,7 @@ class Database {
     this.save();
   }
 
-  private seedInitialData() {
+  public seedInitialData() {
     const salt = bcrypt.genSaltSync(8);
     const passwordHash = bcrypt.hashSync('CareGrid@123', salt);
 
@@ -113,161 +113,162 @@ class Database {
     const users: User[] = [
       {
         id: 'usr-pat-1',
-        email: 'ramesh.patil@patient.caregrid.in',
+        email: 'murugan.patient@caregrid.tn.gov.in',
         passwordHash,
-        name: 'Ramesh Patil',
-        phone: '+91 98220 11234',
+        name: 'Murugan Shanmugam',
+        phone: '+91 94430 11234',
         role: 'PATIENT',
         createdAt: isoNow
       },
       {
         id: 'usr-pat-2',
-        email: 'priya.kulkarni@patient.caregrid.in',
+        email: 'selvi.patient@caregrid.tn.gov.in',
         passwordHash,
-        name: 'Priya Kulkarni',
-        phone: '+91 98220 44556',
+        name: 'Selvi Ramanathan',
+        phone: '+91 94430 44556',
         role: 'PATIENT',
         createdAt: isoNow
       },
       {
         id: 'usr-pat-3',
-        email: 'anandi.bai@patient.caregrid.in',
+        email: 'ramasamy.patient@caregrid.tn.gov.in',
         passwordHash,
-        name: 'Anandi Bai',
-        phone: '+91 98220 77889',
+        name: 'Ramasamy Thevar',
+        phone: '+91 94430 77889',
         role: 'PATIENT',
         createdAt: isoNow
       },
       {
         id: 'usr-hw-1',
-        email: 'sunita.gaikwad@worker.caregrid.in',
+        email: 'meenakshi.vhn@caregrid.tn.gov.in',
         passwordHash,
-        name: 'Sunita Gaikwad (ASHA)',
-        phone: '+91 98220 55678',
+        name: 'Meenakshi Sundaram (VHN)',
+        phone: '+91 94430 55678',
         role: 'HEALTH_WORKER',
         createdAt: isoNow
       },
       {
         id: 'usr-doc-1',
-        email: 'dr.sharma@doctor.caregrid.in',
+        email: 'dr.senthil@cmch.tn.gov.in',
         passwordHash,
-        name: 'Dr. Vivek Sharma',
-        phone: '+91 98220 88990',
+        name: 'Dr. K. Senthil Nathan',
+        phone: '+91 94430 88990',
         role: 'DOCTOR',
         createdAt: isoNow
       },
       {
         id: 'usr-doc-2',
-        email: 'dr.anjali.desai@doctor.caregrid.in',
+        email: 'dr.radhika@cmch.tn.gov.in',
         passwordHash,
-        name: 'Dr. Anjali Desai',
-        phone: '+91 98220 99001',
+        name: 'Dr. Radhika Balasubramanian',
+        phone: '+91 94430 99001',
         role: 'DOCTOR',
         createdAt: isoNow
       },
       {
         id: 'usr-admin-fac-1',
-        email: 'rajesh.admin@facility.caregrid.in',
+        email: 'admin.cmch@caregrid.tn.gov.in',
         passwordHash,
-        name: 'Rajesh Deshmukh (Admin)',
-        phone: '+91 98220 33445',
+        name: 'Dr. S. Anbarasan (CMCH Admin)',
+        phone: '+91 94430 33445',
         role: 'FACILITY_ADMIN',
         createdAt: isoNow
       },
       {
         id: 'usr-admin-sys-1',
-        email: 'dho.solapur@system.caregrid.in',
+        email: 'ddhs.coimbatore@caregrid.tn.gov.in',
         passwordHash,
-        name: 'Dr. Anita Roy (District Health Officer)',
-        phone: '+91 98220 00112',
+        name: 'Dr. P. Arumugam (DDHS Coimbatore)',
+        phone: '+91 94430 66778',
         role: 'SYSTEM_ADMIN',
         createdAt: isoNow
       }
     ];
 
-    // 2. FACILITIES
+    // 2. FACILITIES IN TAMIL NADU (Coimbatore, Chennai, Madurai, Salem, Trichy, Thanjavur)
     const facilities: Facility[] = [
       {
-        id: 'fac-1',
-        name: 'Shirur Rural Primary Health Centre',
+        id: 'fac-cbe-phc',
+        name: 'Kinathukadavu Upgraded Primary Health Centre (PHC)',
         type: 'PHC',
         category: 'Public',
-        latitude: 18.824,
-        longitude: 74.375,
-        address: 'Main Road, Shirur Village, Solapur District',
-        district: 'Solapur',
-        phone: '0217-234101',
+        latitude: 10.821,
+        longitude: 77.019,
+        address: 'Pollachi Main Road, Kinathukadavu, Coimbatore District',
+        district: 'Coimbatore',
+        phone: '04259-224101',
         emergencyCapability: false,
-        totalBeds: 6,
-        occupiedBeds: 5,
-        icuBeds: 0,
-        occupiedIcuBeds: 0,
-        currentQueueLength: 19,
-        averageWaitTimeMin: 45,
-        specialists: [
-          { specialty: 'General Medicine', available: true, doctorName: 'Dr. Jadhav' }
-        ],
-        services: ['Triage', 'Outpatient OPD', 'Basic Immunization', 'Antenatal Check'],
-        availableDiagnostics: ['Blood Glucose', 'Urine Routine', 'Rapid Malaria Kit'],
-        medicineStockRatio: 0.65
-      },
-      {
-        id: 'fac-2',
-        name: 'Barshi Community Health Centre (CHC)',
-        type: 'CHC',
-        category: 'Public',
-        latitude: 18.232,
-        longitude: 75.696,
-        address: 'Kurduwadi Road, Barshi, Solapur',
-        district: 'Solapur',
-        phone: '02184-222333',
-        emergencyCapability: true,
         totalBeds: 30,
         occupiedBeds: 21,
-        icuBeds: 2,
-        occupiedIcuBeds: 2,
-        currentQueueLength: 14,
-        averageWaitTimeMin: 30,
+        icuBeds: 0,
+        occupiedIcuBeds: 0,
+        currentQueueLength: 16,
+        averageWaitTimeMin: 35,
         specialists: [
-          { specialty: 'General Medicine', available: true, doctorName: 'Dr. P. Patil' },
-          { specialty: 'Pediatrics', available: true, doctorName: 'Dr. S. Kadam' },
-          { specialty: 'Obstetrics/Gynecology', available: false, doctorName: 'Dr. M. More' }
+          { specialty: 'General Medicine', available: true, doctorName: 'Dr. M. Jayakumar' }
         ],
-        services: ['24x7 Emergency', 'X-Ray', 'ECG', 'Labor Room', 'Pathology Lab'],
-        availableDiagnostics: ['ECG', 'X-Ray Chest', 'Complete Blood Count (CBC)', 'Liver Function Test'],
-        medicineStockRatio: 0.82
+        services: ['General Outpatient (OPD)', 'Basic Immunization', 'Antenatal Care (MCH)', 'Telemedicine Unit'],
+        availableDiagnostics: ['Blood Glucose', 'Urine Albumin/Sugar', 'Rapid Dengue/Malaria Kit', 'ECG Basic'],
+        medicineStockRatio: 0.88
       },
       {
-        id: 'fac-3',
-        name: 'Solapur District Civil Hospital',
+        id: 'fac-cbe-chc',
+        name: 'Pollachi Sub-District Government Hospital (SDH)',
+        type: 'CHC',
+        category: 'Public',
+        latitude: 10.658,
+        longitude: 77.009,
+        address: 'Palakkad Road, Pollachi, Coimbatore District',
+        district: 'Coimbatore',
+        phone: '04259-223344',
+        emergencyCapability: true,
+        totalBeds: 180,
+        occupiedBeds: 125,
+        icuBeds: 8,
+        occupiedIcuBeds: 5,
+        currentQueueLength: 12,
+        averageWaitTimeMin: 25,
+        specialists: [
+          { specialty: 'General Medicine', available: true, doctorName: 'Dr. S. Karthikeyan' },
+          { specialty: 'Pediatrics', available: true, doctorName: 'Dr. R. Kavitha' },
+          { specialty: 'Obstetrics/Gynecology', available: true, doctorName: 'Dr. V. Deepa' }
+        ],
+        services: ['24x7 Emergency Care', 'CEmONC Maternity Unit', 'Digital X-Ray', 'Blood Storage Centre', 'Pathology'],
+        availableDiagnostics: ['ECG', 'Digital X-Ray', 'Complete Blood Count (CBC)', 'Biochemistry Profile'],
+        medicineStockRatio: 0.91
+      },
+      {
+        id: 'fac-cbe-mch',
+        name: 'Coimbatore Medical College Hospital (CMCH)',
         type: 'District Hospital',
         category: 'Public',
-        latitude: 17.659,
-        longitude: 75.906,
-        address: 'Civil Lines, Near Railway Station, Solapur',
-        district: 'Solapur',
-        phone: '0217-2722100',
+        latitude: 11.002,
+        longitude: 76.967,
+        address: 'Trichy Road, Gopalapuram, Coimbatore',
+        district: 'Coimbatore',
+        phone: '0422-2301393',
         emergencyCapability: true,
-        totalBeds: 250,
-        occupiedBeds: 165,
-        icuBeds: 24,
-        occupiedIcuBeds: 14,
+        totalBeds: 1250,
+        occupiedBeds: 960,
+        icuBeds: 90,
+        occupiedIcuBeds: 68,
         currentQueueLength: 8,
-        averageWaitTimeMin: 20,
+        averageWaitTimeMin: 18,
         specialists: [
-          { specialty: 'Cardiology', available: true, doctorName: 'Dr. Vivek Sharma' },
-          { specialty: 'Obstetrics/Gynecology', available: true, doctorName: 'Dr. Anjali Desai' },
-          { specialty: 'Orthopedics', available: true, doctorName: 'Dr. R. Shinde' },
-          { specialty: 'Pulmonology', available: true, doctorName: 'Dr. K. Joshi' },
-          { specialty: 'General Surgery', available: true, doctorName: 'Dr. A. Verma' }
+          { specialty: 'Cardiology', available: true, doctorName: 'Dr. K. Senthil Nathan' },
+          { specialty: 'Obstetrics/Gynecology', available: true, doctorName: 'Dr. Radhika Balasubramanian' },
+          { specialty: 'Orthopedics', available: true, doctorName: 'Dr. S. Ramanathan' },
+          { specialty: 'Pulmonology', available: true, doctorName: 'Dr. G. Vignesh' },
+          { specialty: 'General Surgery', available: true, doctorName: 'Dr. A. Murugesan' }
         ],
         services: [
-          '24x7 Emergency Trauma Care',
+          '24x7 Comprehensive Emergency Trauma Care',
           'Intensive Coronary Care Unit (ICCU)',
-          'Pathology & Biochemistry Lab',
-          'Digital X-Ray & CT Scan',
-          'Blood Bank',
-          'Telemedicine Hub'
+          'Cardiac Cath Lab & Primary Angioplasty',
+          'Automated Pathology & Molecular Lab',
+          '128-Slice CT Scan & 1.5T MRI',
+          '24x7 Component Blood Bank',
+          'National Telemedicine Hub'
         ],
         availableDiagnostics: [
           'ECG 12-Lead',
@@ -275,42 +276,163 @@ class Database {
           'Chest X-Ray Digital',
           'Echocardiography (2D Echo)',
           'CT Scan',
-          'Comprehensive Blood Panel'
+          'MRI Scan',
+          'Comprehensive Cardiac Profile'
         ],
+        medicineStockRatio: 0.96
+      },
+      {
+        id: 'fac-chn-gh',
+        name: 'Rajiv Gandhi Government General Hospital (RGGGH Chennai)',
+        type: 'Specialist Medical College',
+        category: 'Public',
+        latitude: 13.081,
+        longitude: 80.279,
+        address: 'EVR Periyar Salai, Park Town, Chennai',
+        district: 'Chennai',
+        phone: '044-25305000',
+        emergencyCapability: true,
+        totalBeds: 2700,
+        occupiedBeds: 2280,
+        icuBeds: 240,
+        occupiedIcuBeds: 195,
+        currentQueueLength: 22,
+        averageWaitTimeMin: 30,
+        specialists: [
+          { specialty: 'Cardiology', available: true, doctorName: 'Dr. P. Thirunavukkarasu' },
+          { specialty: 'Cardiac Surgery', available: true, doctorName: 'Dr. K. Manoharan' },
+          { specialty: 'Neurology', available: true, doctorName: 'Dr. S. Sundar' },
+          { specialty: 'Nephrology', available: true, doctorName: 'Dr. R. Vijayakumar' }
+        ],
+        services: [
+          'State Apex Trauma & Resuscitation Center',
+          'Emergency Cardiac Interventions & ICCU',
+          'Organ Transplant Centre',
+          'Comprehensive Stroke Care',
+          'Advanced Tele-ICU Command Unit'
+        ],
+        availableDiagnostics: [
+          'Coronary Angiography',
+          'Cardiac Troponin-T/I Quantitative',
+          'MRI 3T',
+          'CT Angiography',
+          'Electrophysiology Lab'
+        ],
+        medicineStockRatio: 0.98
+      },
+      {
+        id: 'fac-mdu-rajaji',
+        name: 'Government Rajaji Hospital & Medical College (GRH Madurai)',
+        type: 'Specialist Medical College',
+        category: 'Public',
+        latitude: 9.928,
+        longitude: 78.134,
+        address: 'Panagal Road, Alwarpuram, Madurai',
+        district: 'Madurai',
+        phone: '0452-2532535',
+        emergencyCapability: true,
+        totalBeds: 2500,
+        occupiedBeds: 2080,
+        icuBeds: 180,
+        occupiedIcuBeds: 142,
+        currentQueueLength: 18,
+        averageWaitTimeMin: 25,
+        specialists: [
+          { specialty: 'Cardiology', available: true, doctorName: 'Dr. M. Chidambaram' },
+          { specialty: 'Pediatrics', available: true, doctorName: 'Dr. S. Rajeswari' },
+          { specialty: 'Obstetrics/Gynecology', available: true, doctorName: 'Dr. N. Meena' },
+          { specialty: 'Neurology', available: true, doctorName: 'Dr. T. Muthukumar' }
+        ],
+        services: [
+          'Southern Regional Apex Trauma Care',
+          '24x7 Cath Lab & Emergency Cardiac Unit',
+          'Regional Blood Transfusion Center',
+          'NICU / PICU Super-Specialty'
+        ],
+        availableDiagnostics: [
+          'ECG 12-Lead',
+          'Troponin-I Biomarker',
+          '2D Echocardiography',
+          'Spiral CT Scan',
+          'Advanced Biochemistry'
+        ],
+        medicineStockRatio: 0.95
+      },
+      {
+        id: 'fac-slm-mch',
+        name: 'Government Mohan Kumaramangalam Medical College Hospital',
+        type: 'District Hospital',
+        category: 'Public',
+        latitude: 11.664,
+        longitude: 78.146,
+        address: 'Steel Plant Road, Salem',
+        district: 'Salem',
+        phone: '0427-2383313',
+        emergencyCapability: true,
+        totalBeds: 1300,
+        occupiedBeds: 1020,
+        icuBeds: 75,
+        occupiedIcuBeds: 54,
+        currentQueueLength: 14,
+        averageWaitTimeMin: 22,
+        specialists: [
+          { specialty: 'Cardiology', available: true, doctorName: 'Dr. C. Saravanan' },
+          { specialty: 'General Medicine', available: true, doctorName: 'Dr. T. Geetha' },
+          { specialty: 'Orthopedics', available: true, doctorName: 'Dr. V. Mohan' }
+        ],
+        services: ['24x7 Emergency Care', 'ICCU', 'Regional Trauma Unit', 'Hemodialysis Unit'],
+        availableDiagnostics: ['ECG 12-Lead', 'Troponin-I Biomarker', 'Digital X-Ray', 'CT Scan'],
+        medicineStockRatio: 0.93
+      },
+      {
+        id: 'fac-try-gh',
+        name: 'Mahatma Gandhi Memorial Government Hospital (Trichy MGMGH)',
+        type: 'District Hospital',
+        category: 'Public',
+        latitude: 10.812,
+        longitude: 78.686,
+        address: 'Collector Office Road, Puthur, Tiruchirappalli',
+        district: 'Tiruchirappalli',
+        phone: '0431-2770281',
+        emergencyCapability: true,
+        totalBeds: 1200,
+        occupiedBeds: 940,
+        icuBeds: 70,
+        occupiedIcuBeds: 49,
+        currentQueueLength: 15,
+        averageWaitTimeMin: 20,
+        specialists: [
+          { specialty: 'Cardiology', available: true, doctorName: 'Dr. B. Kannan' },
+          { specialty: 'General Surgery', available: true, doctorName: 'Dr. E. Baskaran' }
+        ],
+        services: ['Emergency Resuscitation & Trauma', 'Coronary Care Unit', 'Blood Bank', 'Dialysis'],
+        availableDiagnostics: ['ECG 12-Lead', 'Troponin-I Biomarker', 'Ultrasound', 'CT Scan'],
         medicineStockRatio: 0.94
       },
       {
-        id: 'fac-4',
-        name: 'Dr. VM Government Medical College & Super-Specialty Hospital',
-        type: 'Specialist Medical College',
+        id: 'fac-tj-mch',
+        name: 'Thanjavur Medical College Hospital',
+        type: 'District Hospital',
         category: 'Public',
-        latitude: 17.671,
-        longitude: 75.912,
-        address: 'Opp. District Court, Solapur',
-        district: 'Solapur',
-        phone: '0217-2749401',
+        latitude: 10.758,
+        longitude: 79.106,
+        address: 'Medical College Road, Thanjavur',
+        district: 'Thanjavur',
+        phone: '04362-240024',
         emergencyCapability: true,
-        totalBeds: 600,
-        occupiedBeds: 490,
-        icuBeds: 50,
-        occupiedIcuBeds: 42,
-        currentQueueLength: 25,
-        averageWaitTimeMin: 40,
+        totalBeds: 1100,
+        occupiedBeds: 860,
+        icuBeds: 60,
+        occupiedIcuBeds: 44,
+        currentQueueLength: 13,
+        averageWaitTimeMin: 22,
         specialists: [
-          { specialty: 'Cardiology', available: true, doctorName: 'Dr. H. Mehta' },
-          { specialty: 'Neurology', available: true, doctorName: 'Dr. N. Rao' },
-          { specialty: 'Nephrology', available: true, doctorName: 'Dr. S. Bansal' },
-          { specialty: 'Cardiac Surgery', available: true, doctorName: 'Dr. V. Godbole' }
+          { specialty: 'Cardiology', available: true, doctorName: 'Dr. S. Subramanian' },
+          { specialty: 'Nephrology', available: true, doctorName: 'Dr. K. Jayanthi' }
         ],
-        services: ['Cath Lab & Angioplasty', 'Trauma Centre', 'Hemodialysis', 'NICU / PICU'],
-        availableDiagnostics: [
-          'Coronary Angiography',
-          'MRI',
-          'CT Angiography',
-          'Troponin-T/I Quantitative',
-          'Advanced Biomarkers'
-        ],
-        medicineStockRatio: 0.98
+        services: ['Cauvery Delta Regional Emergency Care', 'ICCU', 'Maternity CEmONC', 'Trauma Unit'],
+        availableDiagnostics: ['ECG 12-Lead', 'Troponin-I Biomarker', '2D Echo', 'CT Scan'],
+        medicineStockRatio: 0.92
       }
     ];
 
@@ -319,12 +441,12 @@ class Database {
       {
         id: 'hw-1',
         userId: 'usr-hw-1',
-        name: 'Sunita Gaikwad',
-        workerType: 'ASHA',
-        assignedVillage: 'Shirur Village',
-        assignedDistrict: 'Solapur',
-        facilityId: 'fac-1',
-        phone: '+91 98220 55678'
+        name: 'Meenakshi Sundaram',
+        workerType: 'VHN',
+        assignedVillage: 'Kinathukadavu Village',
+        assignedDistrict: 'Coimbatore',
+        facilityId: 'fac-cbe-phc',
+        phone: '+91 94430 55678'
       }
     ];
 
@@ -333,20 +455,20 @@ class Database {
       {
         id: 'doc-1',
         userId: 'usr-doc-1',
-        name: 'Dr. Vivek Sharma',
+        name: 'Dr. K. Senthil Nathan',
         specialization: 'Cardiology',
-        licenseNumber: 'MCI-MH-2012-44189',
-        facilityId: 'fac-3',
-        phone: '+91 98220 88990'
+        licenseNumber: 'TNMC-2010-38412',
+        facilityId: 'fac-cbe-mch',
+        phone: '+91 94430 88990'
       },
       {
         id: 'doc-2',
         userId: 'usr-doc-2',
-        name: 'Dr. Anjali Desai',
+        name: 'Dr. Radhika Balasubramanian',
         specialization: 'Obstetrics/Gynecology',
-        licenseNumber: 'MCI-MH-2015-88214',
-        facilityId: 'fac-3',
-        phone: '+91 98220 99001'
+        licenseNumber: 'TNMC-2014-66291',
+        facilityId: 'fac-cbe-mch',
+        phone: '+91 94430 99001'
       }
     ];
 
@@ -355,8 +477,8 @@ class Database {
       {
         id: 'fa-1',
         userId: 'usr-admin-fac-1',
-        name: 'Rajesh Deshmukh',
-        facilityId: 'fac-3'
+        name: 'Dr. S. Anbarasan',
+        facilityId: 'fac-cbe-mch'
       }
     ];
 
@@ -365,20 +487,20 @@ class Database {
       {
         id: 'pat-1',
         userId: 'usr-pat-1',
-        abhaId: '91-8842-1092-4412',
-        name: 'Ramesh Patil',
+        abhaId: '91-4421-8812-7654',
+        name: 'Murugan Shanmugam',
         dateOfBirth: '1976-04-12',
         gender: 'MALE',
         bloodGroup: 'B+',
-        addressVillage: 'Shirur Village',
-        district: 'Solapur',
-        state: 'Maharashtra',
-        pincode: '413204',
-        latitude: 18.825,
-        longitude: 74.378,
+        addressVillage: 'Kinathukadavu Village',
+        district: 'Coimbatore',
+        state: 'Tamil Nadu',
+        pincode: '642109',
+        latitude: 10.825,
+        longitude: 77.021,
         assignedWorkerId: 'hw-1',
-        emergencyContactName: 'Lata Patil (Spouse)',
-        emergencyContactPhone: '+91 98220 11999',
+        emergencyContactName: 'Lakshmi Shanmugam (Spouse)',
+        emergencyContactPhone: '+91 94430 11999',
         conditions: ['Hypertension (Stage 2)', 'Mild Dyslipidemia'],
         allergies: ['Penicillin'],
         medications: ['Amlodipine 5mg OD', 'Atorvastatin 10mg HS']
@@ -386,20 +508,20 @@ class Database {
       {
         id: 'pat-2',
         userId: 'usr-pat-2',
-        abhaId: '91-3319-4401-8831',
-        name: 'Priya Kulkarni',
-        dateOfBirth: '1990-09-22',
+        abhaId: '91-7732-1109-3321',
+        name: 'Selvi Ramanathan',
+        dateOfBirth: '1996-09-22',
         gender: 'FEMALE',
         bloodGroup: 'O+',
-        addressVillage: 'Vairag Village',
-        district: 'Solapur',
-        state: 'Maharashtra',
-        pincode: '413402',
-        latitude: 18.06,
-        longitude: 75.81,
+        addressVillage: 'Melur Village',
+        district: 'Madurai',
+        state: 'Tamil Nadu',
+        pincode: '625106',
+        latitude: 10.048,
+        longitude: 78.336,
         assignedWorkerId: 'hw-1',
-        emergencyContactName: 'Mahesh Kulkarni',
-        emergencyContactPhone: '+91 98220 44999',
+        emergencyContactName: 'Ramanathan (Spouse)',
+        emergencyContactPhone: '+91 94430 44999',
         conditions: ['Gestational Hypertension', 'Second Trimester Pregnancy'],
         allergies: ['Sulfa drugs'],
         medications: ['Labetalol 100mg BD', 'Iron & Folic Acid']
@@ -407,132 +529,112 @@ class Database {
       {
         id: 'pat-3',
         userId: 'usr-pat-3',
-        abhaId: '91-1123-5590-7712',
-        name: 'Anandi Bai',
-        dateOfBirth: '1962-11-05',
-        gender: 'FEMALE',
+        abhaId: '91-2210-9941-8890',
+        name: 'Ramasamy Thevar',
+        dateOfBirth: '1960-11-05',
+        gender: 'MALE',
         bloodGroup: 'A+',
-        addressVillage: 'Shirur Village',
-        district: 'Solapur',
-        state: 'Maharashtra',
-        pincode: '413204',
-        latitude: 18.823,
-        longitude: 74.372,
+        addressVillage: 'Kinathukadavu Village',
+        district: 'Coimbatore',
+        state: 'Tamil Nadu',
+        pincode: '642109',
+        latitude: 10.823,
+        longitude: 77.018,
         assignedWorkerId: 'hw-1',
-        emergencyContactName: 'Ganesh (Son)',
-        emergencyContactPhone: '+91 98220 77000',
-        conditions: ['Type 2 Diabetes', 'Osteoarthritis'],
+        emergencyContactName: 'Murugesan (Son)',
+        emergencyContactPhone: '+91 94430 77000',
+        conditions: ['Type 2 Diabetes', 'Diabetic Neuropathy'],
         allergies: [],
         medications: ['Metformin 500mg BD', 'Glimepiride 1mg OD']
       }
     ];
 
-    // 7. MEDICINES
+    // 7. MEDICINES (CMCH Coimbatore & Kinathukadavu PHC)
     const medicines: Medicine[] = [
       {
         id: 'med-1',
-        facilityId: 'fac-3',
-        name: 'Aspirin 75mg Gastro-resistant',
+        facilityId: 'fac-cbe-mch',
+        name: 'Aspirin 75mg Gastro-resistant (TNMSC)',
         category: 'Antiplatelet',
-        stockCount: 4200,
+        stockCount: 5400,
         unit: 'tablets',
         isAvailable: true,
         lastUpdated: isoNow
       },
       {
         id: 'med-2',
-        facilityId: 'fac-3',
+        facilityId: 'fac-cbe-mch',
         name: 'Clopidogrel 75mg',
         category: 'Antiplatelet',
-        stockCount: 2800,
+        stockCount: 3200,
         unit: 'tablets',
         isAvailable: true,
         lastUpdated: isoNow
       },
       {
         id: 'med-3',
-        facilityId: 'fac-3',
+        facilityId: 'fac-cbe-mch',
         name: 'Atorvastatin 40mg',
-        category: 'Lipid-lowering',
-        stockCount: 1950,
+        category: 'Statin',
+        stockCount: 2600,
         unit: 'tablets',
         isAvailable: true,
         lastUpdated: isoNow
       },
       {
         id: 'med-4',
-        facilityId: 'fac-3',
-        name: 'Streptokinase 1.5 MU Injection',
+        facilityId: 'fac-cbe-mch',
+        name: 'Inj. Streptokinase 1.5 MU / Tenecteplase',
         category: 'Thrombolytic',
-        stockCount: 45,
+        stockCount: 35,
         unit: 'vials',
         isAvailable: true,
         lastUpdated: isoNow
       },
       {
         id: 'med-5',
-        facilityId: 'fac-3',
-        name: 'Nitroglycerin Sublingual 0.5mg',
-        category: 'Nitrate vasodilator',
-        stockCount: 850,
+        facilityId: 'fac-cbe-phc',
+        name: 'Amlodipine 5mg (TNMSC)',
+        category: 'Antihypertensive',
+        stockCount: 8200,
         unit: 'tablets',
-        isAvailable: true,
-        lastUpdated: isoNow
-      },
-      {
-        id: 'med-6',
-        facilityId: 'fac-1',
-        name: 'Paracetamol 500mg',
-        category: 'Analgesic/Antipyretic',
-        stockCount: 300,
-        unit: 'tablets',
-        isAvailable: true,
-        lastUpdated: isoNow
-      },
-      {
-        id: 'med-7',
-        facilityId: 'fac-1',
-        name: 'ORS Packets',
-        category: 'Oral Rehydration',
-        stockCount: 120,
-        unit: 'sachets',
         isAvailable: true,
         lastUpdated: isoNow
       }
     ];
 
-    // 8. TRIAGE FOR PATIENT 1
+    // 8. TRIAGE ASSESSMENTS
     const triages: TriageAssessment[] = [
       {
         id: 'trg-1',
         patientId: 'pat-1',
-        symptoms: 'Chest heaviness radiating to left shoulder, breathlessness on exertion, sweating for 3 hours',
-        symptomsList: ['Chest pain / heaviness', 'Radiation to left arm', 'Difficulty breathing', 'Cold sweating'],
-        duration: '3 hours',
+        symptoms: 'Substernal chest pressure radiating to left arm and jaw, accompanied by diaphoresis and shortness of breath for 1 hour.',
+        symptomsList: ['Chest Pain', 'Breathlessness', 'Diaphoresis', 'Left arm radiation'],
+        duration: '1 hour',
         vitals: {
-          bpSystolic: 156,
+          bpSystolic: 168,
           bpDiastolic: 98,
           heartRate: 104,
           spo2: 94,
-          temperatureF: 98.6
+          temperatureF: 98.4
         },
         urgency: 'RED',
         reasons: [
-          'Acute onset oppressive retrosternal chest pain radiating to left shoulder',
+          'Acute onset retrosternal crushing chest pain radiating to left arm',
           'Exertional dyspnea accompanied by diaphoresis (cold sweats)',
-          'Tachycardia (HR 104 bpm) with elevated BP (156/98 mmHg) in a patient with Stage 2 Hypertension'
+          'Tachycardia (HR 104 bpm) with severe hypertension (168/98 mmHg) in a known hypertensive patient'
         ],
         warningSigns: [
-          'Risk of Acute Coronary Syndrome / Myocardial Ischemia',
+          'High risk of Acute Coronary Syndrome (STEMI / NSTEMI)',
           'SpO2 94% indicates borderline respiratory compromise',
-          'Immediate cardiac biomarker and 12-lead ECG required'
+          'Immediate 12-lead ECG, Troponin-I and resuscitation bay required'
         ],
-        recommendedAction: 'Immediate emergency evaluation at District Hospital with 24x7 ICCU and Cardiologist.',
+        recommendedAction: 'Immediate emergency transfer to Coimbatore Medical College Hospital (CMCH) with 24x7 ICCU, Cath Lab, and Cardiologist on duty.',
         confidenceScore: 0.98,
         humanConfirmed: true,
         confirmedByWorkerId: 'hw-1',
-        confirmedByWorkerName: 'Sunita Gaikwad (ASHA)',
-        aiClinicalSummary: 'Critical suspicion of Acute Coronary Syndrome. Ruled out routine outpatient handling. Recommend immediate non-delay referral to District Hospital with Troponin-I and 12-lead ECG availability.',
+        confirmedByWorkerName: 'Meenakshi Sundaram (VHN)',
+        aiClinicalSummary: 'Critical suspicion of Acute Coronary Syndrome. Ruled out routine outpatient handling. Direct referral to CMCH ICCU initiated without administrative delay.',
         createdAt: new Date(now.getTime() - 4 * 3600000).toISOString()
       }
     ];
@@ -541,48 +643,48 @@ class Database {
     const referrals: Referral[] = [
       {
         id: 'ref-1',
-        referralCode: 'REF-2026-0914',
+        referralCode: 'REF-TN-2026-0914',
         patientId: 'pat-1',
         triageId: 'trg-1',
         referringWorkerId: 'hw-1',
-        referringWorkerName: 'Sunita Gaikwad (ASHA)',
-        targetFacilityId: 'fac-3',
-        targetFacilityName: 'Solapur District Civil Hospital',
+        referringWorkerName: 'Meenakshi Sundaram (VHN)',
+        targetFacilityId: 'fac-cbe-mch',
+        targetFacilityName: 'Coimbatore Medical College Hospital (CMCH)',
         assignedDoctorId: 'doc-1',
-        assignedDoctorName: 'Dr. Vivek Sharma',
-        reasonForReferral: 'Suspected Acute Coronary Syndrome with severe retrosternal oppression and diaphoresis',
-        clinicalSummary: '48yo Male with HTN presenting with 3hr chest pressure radiating to arm, SpO2 94%, BP 156/98. Triage level RED. Referred for urgent ECG, Troponin-I and specialist cardiology management.',
+        assignedDoctorName: 'Dr. K. Senthil Nathan',
+        reasonForReferral: 'Suspected Acute Coronary Syndrome with crushing chest pain and elevated BP',
+        clinicalSummary: '50yo Male from Kinathukadavu with Stage 2 HTN presenting with 1hr crushing chest pain radiating to left arm, SpO2 94%, BP 168/98 mmHg, HR 104 bpm. Triage RED. Dispatched with sublingual aspirin and nitrate pre-alert.',
         status: 'ACCEPTED',
         priorityLevel: 'EMERGENCY',
         statusHistory: [
           {
             status: 'CREATED',
-            notes: 'Generated by ASHA Sunita Gaikwad after rural home visit and digital triage',
-            updatedBy: 'Sunita Gaikwad (ASHA)',
+            notes: 'Generated by VHN Meenakshi Sundaram following home visit and digital triage at Kinathukadavu',
+            updatedBy: 'Meenakshi Sundaram (VHN)',
             timestamp: new Date(now.getTime() - 3.8 * 3600000).toISOString()
           },
           {
             status: 'SENT',
-            notes: 'Transmitted securely via CareGrid referral network',
-            updatedBy: 'CareGrid Routing Engine',
+            notes: 'Transmitted securely via Tamil Nadu CareGrid Referral Network',
+            updatedBy: 'CareGrid Intelligent Routing Engine',
             timestamp: new Date(now.getTime() - 3.7 * 3600000).toISOString()
           },
           {
             status: 'RECEIVED',
-            notes: 'Received in District Hospital Cardiology triage intake pool',
-            updatedBy: 'District Hospital Intake System',
+            notes: 'Received in CMCH Emergency Cardiology intake pool',
+            updatedBy: 'CMCH Intake Desk',
             timestamp: new Date(now.getTime() - 3.5 * 3600000).toISOString()
           },
           {
             status: 'UNDER_REVIEW',
-            notes: 'Dr. Vivek Sharma reviewing triage vitals and clinical warning signs',
-            updatedBy: 'Dr. Vivek Sharma',
+            notes: 'Dr. K. Senthil Nathan reviewed vitals and telemetry notes',
+            updatedBy: 'Dr. K. Senthil Nathan',
             timestamp: new Date(now.getTime() - 3.2 * 3600000).toISOString()
           },
           {
             status: 'ACCEPTED',
-            notes: 'Accepted into Priority Emergency Cardiology Bay. Bed and ECG pre-alerted.',
-            updatedBy: 'Dr. Vivek Sharma',
+            notes: 'Accepted into Priority ICCU Resuscitation Bay. 12-lead ECG and Troponin pre-alerted.',
+            updatedBy: 'Dr. K. Senthil Nathan',
             timestamp: new Date(now.getTime() - 3.0 * 3600000).toISOString()
           }
         ],
@@ -595,114 +697,104 @@ class Database {
     const appointments: Appointment[] = [
       {
         id: 'apt-1',
-        appointmentNo: 'APT-2026-8812',
+        appointmentNo: 'APT-TN-2026-8812',
         tokenNumber: 'TK-CARDIO-04',
         patientId: 'pat-1',
-        facilityId: 'fac-3',
-        facilityName: 'Solapur District Civil Hospital',
+        patientName: 'Murugan Shanmugam',
+        facilityId: 'fac-cbe-mch',
+        facilityName: 'Coimbatore Medical College Hospital (CMCH)',
+        department: 'Cardiology (Emergency Bay)',
+        doctorId: 'doc-1',
+        doctorName: 'Dr. K. Senthil Nathan',
+        scheduledDate: isoNow,
+        timeSlot: '11:00 AM - 11:30 AM',
+        status: 'CONFIRMED',
+        priority: 'EMERGENCY',
+        queuePosition: 2,
+        estimatedWaitTimeMin: 15,
         referralId: 'ref-1',
-        scheduledFor: new Date(now.getTime() + 1 * 3600000).toISOString(),
-        status: 'CONFIRMED',
-        department: 'Cardiology Emergency OPD',
-        estimatedWaitMinutes: 10,
-        notes: 'Priority referral handshake confirmed. Present directly at Emergency Room Bay 2.',
-        createdAt: new Date(now.getTime() - 2.9 * 3600000).toISOString()
-      },
-      {
-        id: 'apt-2',
-        appointmentNo: 'APT-2026-7731',
-        tokenNumber: 'TK-ANC-12',
-        patientId: 'pat-2',
-        facilityId: 'fac-3',
-        facilityName: 'Solapur District Civil Hospital',
-        scheduledFor: new Date(now.getTime() + 24 * 3600000).toISOString(),
-        status: 'CONFIRMED',
-        department: 'High-Risk Obstetrics OPD',
-        estimatedWaitMinutes: 20,
-        notes: 'Routine second-trimester anomaly ultrasound and maternal BP profile review.',
-        createdAt: new Date(now.getTime() - 12 * 3600000).toISOString()
+        createdAt: new Date(now.getTime() - 3.0 * 3600000).toISOString()
       }
     ];
 
-    // 11. CARE JOURNEY FOR RAMESH PATIL
+    // 11. CARE JOURNEY
     const careJourneys: CareJourney[] = [
       {
         id: 'cj-1',
         patientId: 'pat-1',
-        referralId: 'ref-1',
-        title: 'Cardiac Evaluation & Ischemia Care Pathway',
+        patientName: 'Murugan Shanmugam',
+        title: 'Acute Coronary Evaluation & Secondary Prevention Pathway',
+        currentStage: 'Appointment',
+        nextBestAction: 'Proceed to CMCH Emergency Resuscitation Bay 2 with Token TK-CARDIO-04. 12-lead ECG and Troponin bedside draw ready.',
         overallStatus: 'ACTIVE',
-        currentStage: 'Appointment & Clinical Admission',
-        nextBestAction: 'Proceed to District Civil Hospital Emergency Room Bay 2 with Token TK-CARDIO-04. Health Worker Sunita will accompany or track your arrival.',
         steps: [
           {
             id: 'cjs-1',
             stepOrder: 1,
-            name: 'Initial consultation',
+            name: 'Initial Field Consultation',
             status: 'COMPLETED',
             completedAt: new Date(now.getTime() - 4.5 * 3600000).toISOString(),
-            notes: 'Symptom reporting via ASHA worker visit in Shirur Village'
+            notes: 'VHN Meenakshi conducted acute doorstep evaluation for severe retrosternal chest pain.'
           },
           {
             id: 'cjs-2',
             stepOrder: 2,
-            name: 'Triage',
+            name: 'AI-Assisted Digital Triage',
             status: 'COMPLETED',
             completedAt: new Date(now.getTime() - 4.0 * 3600000).toISOString(),
-            notes: 'Classified as RED (Emergency). Human confirmed by ASHA Sunita Gaikwad.'
+            notes: 'Classified RED Urgency based on vital signs (BP 168/98, HR 104, SpO2 94%) and clinical red flags.'
           },
           {
             id: 'cjs-3',
             stepOrder: 3,
-            name: 'Referral',
+            name: 'Facility Routing & Referral',
             status: 'COMPLETED',
-            completedAt: new Date(now.getTime() - 3.8 * 3600000).toISOString(),
-            notes: 'Intelligent capacity routing matched Solapur District Hospital (Score 96/100)'
+            completedAt: new Date(now.getTime() - 3.7 * 3600000).toISOString(),
+            notes: 'CareGrid prioritized CMCH (Cardiologist on-duty, Cath Lab, 24x7 ICCU) over local PHC.'
           },
           {
             id: 'cjs-4',
             stepOrder: 4,
-            name: 'Hospital acceptance',
+            name: 'Hospital Acceptance & Bed Lock',
             status: 'COMPLETED',
             completedAt: new Date(now.getTime() - 3.0 * 3600000).toISOString(),
-            notes: 'Dr. Vivek Sharma reviewed referral and confirmed admission bay'
+            notes: 'Dr. K. Senthil Nathan formally accepted referral REF-TN-2026-0914.'
           },
           {
             id: 'cjs-5',
             stepOrder: 5,
-            name: 'Appointment',
+            name: 'Appointment & Priority OPD Token',
             status: 'IN_PROGRESS',
-            scheduledAt: new Date(now.getTime() + 1 * 3600000).toISOString(),
-            notes: 'Token TK-CARDIO-04 generated with expedited priority wait time (10 mins)',
-            actionRequired: 'Arrive at Emergency Bay 2. Show digital referral code REF-2026-0914.'
+            actionRequired: 'Arrive at CMCH Triage Desk with Token TK-CARDIO-04. Estimated wait: ~15 mins.',
+            notes: 'Token issued. Emergency priority lane active.'
           },
           {
             id: 'cjs-6',
             stepOrder: 6,
-            name: 'Diagnostic test',
+            name: 'Diagnostic Test Verification',
             status: 'UPCOMING',
-            notes: '12-lead ECG, Troponin-I, and Serum Creatinine scheduled upon arrival'
+            notes: '12-lead ECG, Troponin-I Quantitative, and 2D Echocardiography scheduled.'
           },
           {
             id: 'cjs-7',
             stepOrder: 7,
-            name: 'Specialist consultation',
+            name: 'Specialist Cardiology Consultation',
             status: 'UPCOMING',
-            notes: 'Consultation with Cardiologist Dr. Vivek Sharma'
+            notes: 'Clinical evaluation with Dr. K. Senthil Nathan.'
           },
           {
             id: 'cjs-8',
             stepOrder: 8,
-            name: 'Treatment',
+            name: 'Medical Treatment & Optimization',
             status: 'UPCOMING',
-            notes: 'Cardioprotective medical management and risk stratification'
+            notes: 'Titration of dual antiplatelet and antihypertensive regimens.'
           },
           {
             id: 'cjs-9',
             stepOrder: 9,
-            name: 'Follow-up',
+            name: 'Community Post-Discharge Follow-up',
             status: 'UPCOMING',
-            notes: 'Community health worker home visit 7 days post-discharge'
+            notes: '7-day home follow-up by VHN Meenakshi Sundaram.'
           }
         ],
         createdAt: new Date(now.getTime() - 4.5 * 3600000).toISOString(),
@@ -710,37 +802,34 @@ class Database {
       }
     ];
 
-    // 12. CARE GAPS (Care-Gap Radar)
+    // 12. CARE GAPS
     const careGaps: CareGap[] = [
       {
         id: 'gap-1',
         patientId: 'pat-3',
-        patientName: 'Anandi Bai',
+        patientName: 'Ramasamy Thevar',
         gapType: 'FOLLOWUP_OVERDUE',
         severity: 'HIGH',
-        dueDate: new Date(now.getTime() - 3 * 86400000).toISOString(),
-        detectedDate: new Date(now.getTime() - 2 * 86400000).toISOString(),
-        responsibleWorkerId: 'hw-1',
-        responsibleWorkerName: 'Sunita Gaikwad (ASHA)',
+        dueDate: new Date(now.getTime() - 4 * 86400000).toISOString(),
         status: 'OPEN',
-        actionTaken: 'Automated SMS and CareGrid alert sent to ASHA worker',
-        resolutionNotes: 'Patient missed 30-day HbA1c lab test and diabetic foot check at Shirur PHC.',
-        updatedAt: isoNow
+        responsibleWorkerId: 'hw-1',
+        responsibleWorkerName: 'Meenakshi Sundaram (VHN)',
+        resolutionNotes: 'Patient 4 days overdue for monthly Diabetes foot check and HbA1c review at Kinathukadavu PHC.',
+        createdAt: new Date(now.getTime() - 4 * 86400000).toISOString()
       },
       {
         id: 'gap-2',
         patientId: 'pat-2',
-        patientName: 'Priya Kulkarni',
+        patientName: 'Selvi Ramanathan',
         gapType: 'DIAGNOSTIC_OVERDUE',
-        severity: 'MODERATE',
-        dueDate: new Date(now.getTime() - 1 * 86400000).toISOString(),
-        detectedDate: new Date(now.getTime() - 12 * 3600000).toISOString(),
-        responsibleWorkerId: 'hw-1',
-        responsibleWorkerName: 'Sunita Gaikwad (ASHA)',
+        severity: 'CRITICAL',
+        dueDate: new Date(now.getTime() - 2 * 86400000).toISOString(),
         status: 'ACKNOWLEDGED',
-        actionTaken: 'ASHA notified patient; appointment scheduled for tomorrow at District Hospital',
-        resolutionNotes: 'Routine 20-week pregnancy anomaly scan was delayed by 24 hours.',
-        updatedAt: isoNow
+        responsibleWorkerId: 'hw-1',
+        responsibleWorkerName: 'Meenakshi Sundaram (VHN)',
+        resolutionNotes: 'Second-trimester anomaly ultrasound and urine protein test pending in Melur sector.',
+        actionTaken: 'Contacted patient via tele-call; scheduled appointment at Madurai Rajaji Hospital.',
+        createdAt: new Date(now.getTime() - 2 * 86400000).toISOString()
       }
     ];
 
@@ -749,23 +838,23 @@ class Database {
       {
         id: 'fup-1',
         patientId: 'pat-3',
-        patientName: 'Anandi Bai',
+        patientName: 'Ramasamy Thevar',
         responsibleWorkerId: 'hw-1',
-        dueDate: new Date(now.getTime() - 3 * 86400000).toISOString(),
+        dueDate: new Date(now.getTime() - 4 * 86400000).toISOString(),
         reason: 'Monthly Diabetes fasting glucose and blood pressure compliance visit',
         isCompleted: false,
-        notes: 'Overdue by 3 days. Patient reported feeling fatigued.',
+        notes: 'Overdue by 4 days. Patient reported feeling fatigued.',
         missedAlertRaised: true
       },
       {
         id: 'fup-2',
         patientId: 'pat-1',
-        patientName: 'Ramesh Patil',
+        patientName: 'Murugan Shanmugam',
         responsibleWorkerId: 'hw-1',
         dueDate: new Date(now.getTime() + 7 * 86400000).toISOString(),
         reason: 'Post-cardiac consultation medication adherence check and symptom diary review',
         isCompleted: false,
-        notes: 'Planned following hospital evaluation.',
+        notes: 'Planned following CMCH hospital evaluation.',
         missedAlertRaised: false
       }
     ];
@@ -776,11 +865,11 @@ class Database {
         id: 'diag-1',
         testName: '12-Lead ECG & Troponin-I Quantitative',
         patientId: 'pat-1',
-        patientName: 'Ramesh Patil',
+        patientName: 'Murugan Shanmugam',
         requestingDoctorId: 'doc-1',
-        requestingDoctorName: 'Dr. Vivek Sharma',
-        facilityId: 'fac-3',
-        facilityName: 'Solapur District Civil Hospital',
+        requestingDoctorName: 'Dr. K. Senthil Nathan',
+        facilityId: 'fac-cbe-mch',
+        facilityName: 'Coimbatore Medical College Hospital (CMCH)',
         status: 'SCHEDULED',
         requiredDate: isoNow,
         scheduledDate: new Date(now.getTime() + 1.2 * 3600000).toISOString(),
@@ -788,23 +877,23 @@ class Database {
       },
       {
         id: 'diag-2',
-        testName: 'HbA1c Glycated Hemoglobin',
+        testName: 'HbA1c Glycated Hemoglobin & Renal Function',
         patientId: 'pat-3',
-        patientName: 'Anandi Bai',
-        facilityId: 'fac-1',
-        facilityName: 'Shirur Rural Primary Health Centre',
+        patientName: 'Ramasamy Thevar',
+        facilityId: 'fac-cbe-phc',
+        facilityName: 'Kinathukadavu Upgraded Primary Health Centre',
         status: 'OVERDUE',
         requiredDate: new Date(now.getTime() - 4 * 86400000).toISOString(),
         createdAt: new Date(now.getTime() - 10 * 86400000).toISOString()
       }
     ];
 
-    // 15. CONSENTS
+    // 15. CONSENTS (ABDM Compliance)
     const consents: Consent[] = [
       {
         id: 'cst-1',
         patientId: 'pat-1',
-        requestedBy: 'Solapur District Civil Hospital (Emergency & Cardiology)',
+        requestedBy: 'Coimbatore Medical College Hospital (CMCH Emergency & Cardiology)',
         purpose: 'Care Coordination, Emergency Triage Review & Diagnostic Access',
         dataScope: 'ALL',
         status: 'GRANT',
@@ -814,7 +903,7 @@ class Database {
       {
         id: 'cst-2',
         patientId: 'pat-2',
-        requestedBy: 'High-Risk Maternal Health Registry',
+        requestedBy: 'Tamil Nadu High-Risk Maternal Health Registry (PICME)',
         purpose: 'Maternal-Fetal Care-Pathway Tracking & Antenatal Records',
         dataScope: 'CONSULTATIONS',
         status: 'GRANT',
@@ -828,13 +917,13 @@ class Database {
       {
         id: 'tc-1',
         patientId: 'pat-2',
-        patientName: 'Priya Kulkarni',
-        provider: 'eSanjeevani Tele-Hub Solapur (Mock Adapter)',
-        roomUrl: 'https://mock.esanjeevani.gov.in/room/solapur-obgyn-991',
-        sessionToken: 'esanj-tok-9921-solapur',
+        patientName: 'Selvi Ramanathan',
+        provider: 'eSanjeevani Tele-Hub Madurai (Tamil Nadu Health System Adapter)',
+        roomUrl: 'https://mock.esanjeevani.gov.in/room/madurai-obgyn-991',
+        sessionToken: 'esanj-tok-9921-madurai',
         status: 'SCHEDULED',
         scheduledAt: new Date(now.getTime() + 2 * 3600000).toISOString(),
-        doctorName: 'Dr. Anjali Desai',
+        doctorName: 'Dr. Radhika Balasubramanian',
         notes: 'Pre-visit tele-triage for gestational hypertension review',
         createdAt: new Date(now.getTime() - 1 * 3600000).toISOString()
       }
@@ -845,44 +934,44 @@ class Database {
       {
         id: 'aud-1',
         userId: 'usr-hw-1',
-        userName: 'Sunita Gaikwad (ASHA)',
+        userName: 'Meenakshi Sundaram (VHN)',
         userRole: 'HEALTH_WORKER',
         action: 'TRIAGE_ASSESSMENT_RECORDED',
         resource: 'TriageAssessment/trg-1',
-        details: 'Patient Ramesh Patil triaged as RED (Emergency). Clinical red flags noted.',
+        details: 'Patient Murugan Shanmugam triaged as RED (Emergency). Clinical red flags noted.',
         ipAddress: '10.42.1.8',
         timestamp: new Date(now.getTime() - 4.0 * 3600000).toISOString()
       },
       {
         id: 'aud-2',
         userId: 'usr-hw-1',
-        userName: 'Sunita Gaikwad (ASHA)',
+        userName: 'Meenakshi Sundaram (VHN)',
         userRole: 'HEALTH_WORKER',
         action: 'REFERRAL_INITIATED',
         resource: 'Referral/ref-1',
-        details: 'Created emergency referral to Solapur District Civil Hospital (Dr. Vivek Sharma).',
+        details: 'Created emergency referral to Coimbatore Medical College Hospital (Dr. K. Senthil Nathan).',
         ipAddress: '10.42.1.8',
         timestamp: new Date(now.getTime() - 3.8 * 3600000).toISOString()
       },
       {
         id: 'aud-3',
         userId: 'usr-doc-1',
-        userName: 'Dr. Vivek Sharma',
+        userName: 'Dr. K. Senthil Nathan',
         userRole: 'DOCTOR',
         action: 'REFERRAL_ACCEPTED',
         resource: 'Referral/ref-1',
-        details: 'Accepted referral REF-2026-0914 into emergency cardiology intake pool.',
+        details: 'Accepted referral REF-TN-2026-0914 into CMCH emergency cardiology intake pool.',
         ipAddress: '192.168.10.44',
         timestamp: new Date(now.getTime() - 3.0 * 3600000).toISOString()
       },
       {
         id: 'aud-4',
         userId: 'usr-pat-1',
-        userName: 'Ramesh Patil',
+        userName: 'Murugan Shanmugam',
         userRole: 'PATIENT',
         action: 'CONSENT_GRANTED',
         resource: 'Consent/cst-1',
-        details: 'Authorized data sharing with Solapur District Civil Hospital.',
+        details: 'Authorized data sharing with Coimbatore Medical College Hospital.',
         ipAddress: '49.36.112.50',
         timestamp: new Date(now.getTime() - 3.9 * 3600000).toISOString()
       }
@@ -894,7 +983,7 @@ class Database {
         id: 'notif-1',
         userId: 'usr-hw-1',
         title: 'Emergency Referral Handshake Complete',
-        message: 'Dr. Vivek Sharma accepted referral for Ramesh Patil. Token TK-CARDIO-04 generated.',
+        message: 'Dr. K. Senthil Nathan accepted referral for Murugan Shanmugam. Token TK-CARDIO-04 generated.',
         type: 'REFERRAL',
         isRead: false,
         linkUrl: '/referrals',
@@ -904,7 +993,7 @@ class Database {
         id: 'notif-2',
         userId: 'usr-pat-1',
         title: 'Referral Accepted & Emergency Bay Ready',
-        message: 'Your referral to District Civil Hospital was accepted. Token TK-CARDIO-04 assigned. Please proceed to Bay 2.',
+        message: 'Your referral to Coimbatore Medical College Hospital was accepted. Token TK-CARDIO-04 assigned. Please proceed to Resuscitation Bay 2.',
         type: 'REFERRAL',
         isRead: false,
         linkUrl: '/care-journey',
@@ -914,7 +1003,7 @@ class Database {
         id: 'notif-3',
         userId: 'usr-hw-1',
         title: 'Care-Gap Radar: Overdue Follow-up Alert',
-        message: 'Patient Anandi Bai is 3 days overdue for diabetes and HbA1c review at Shirur PHC.',
+        message: 'Patient Ramasamy Thevar is 4 days overdue for diabetes and HbA1c review at Kinathukadavu PHC.',
         type: 'CARE_GAP',
         isRead: false,
         linkUrl: '/care-gaps',
@@ -990,6 +1079,20 @@ class Database {
     this.data.notifications.unshift(entry);
     this.save();
     return entry;
+  }
+
+  // Add a facility to the database
+  public addFacility(facility: Facility) {
+    this.data.facilities.push(facility);
+    this.save();
+    return facility;
+  }
+
+  // Add a user to the database
+  public addUser(user: User) {
+    this.data.users.push(user);
+    this.save();
+    return user;
   }
 }
 

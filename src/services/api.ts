@@ -65,6 +65,27 @@ export const api = {
       body: JSON.stringify({ email, password })
     }),
 
+  register: (payload: {
+    name: string;
+    email: string;
+    password: string;
+    role: UserRole;
+    phone?: string;
+    assignedVillage?: string;
+    assignedDistrict?: string;
+    abhaId?: string;
+    gender?: string;
+    bloodGroup?: string;
+    dateOfBirth?: string;
+    specialization?: string;
+    licenseNumber?: string;
+    facilityId?: string;
+  }) =>
+    request<{ token: string; user: User; profile: any }>('/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    }),
+
   switchPersona: (role: UserRole, userId?: string) =>
     request<{ token: string; user: User; profile: any }>('/auth/switch-persona', {
       method: 'POST',
@@ -101,6 +122,12 @@ export const api = {
 
   // Facilities & Capacity Routing
   getFacilities: () => request<Facility[]>('/facilities'),
+
+  createFacility: (payload: Partial<Facility>) =>
+    request<Facility>('/facilities', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    }),
 
   recommendFacilities: (payload: {
     patientLatitude?: number;

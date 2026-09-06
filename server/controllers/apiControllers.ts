@@ -69,6 +69,145 @@ export async function login(req: AuthRequest, res: Response) {
   });
 }
 
+export async function register(req: AuthRequest, res: Response) {
+  const {
+    name,
+    email,
+    password,
+    role,
+    phone,
+    assignedVillage,
+    assignedDistrict,
+    abhaId,
+    gender,
+    bloodGroup,
+    dateOfBirth,
+    specialization,
+    licenseNumber,
+    facilityId
+  } = req.body;
+
+  if (!name || !email || !password || !role) {
+    res.status(400).json({ error: 'Name, email, password, and role are required' });
+    return;
+  }
+
+  const existing = db.users.find(u => u.email.toLowerCase() === email.toLowerCase());
+  if (existing) {
+    res.status(400).json({ error: 'A user with this email address already exists.' });
+    return;
+  }
+
+  const salt = bcrypt.genSaltSync(8);
+  const passwordHash = bcrypt.hashSync(password, salt);
+  const userId = 'usr-' + Date.now();
+  const isoNow = new Date().toISOString();
+
+  const newUser = {
+    id: userId,
+    email: email.toLowerCase(),
+    passwordHash,
+    name,
+    phone: phone || '+91 94430 ' + Math.floor(10000 + Math.random() * 90000),
+    role: role as UserRole,
+    createdAt: isoNow
+  };
+
+  db.addUser(newUser);
+
+  let profile: any = null;
+
+  if (role === 'PATIENT') {
+    const generatedAbha = abhaId || `91-${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(1000 + Math.random() * 9000)}-${Math.floor(1000 + Math.random() * 9000)}`;
+    const patientObj = {
+      id: 'pat-' + Date.now(),
+      userId,
+      abhaId: generatedAbha,
+      name,
+      dateOfBirth: dateOfBirth || '1985-06-15',
+      gender: (gender || 'MALE') as 'MALE' | 'FEMALE' | 'OTHER',
+      bloodGroup: bloodGroup || 'B+',
+      addressVillage: assignedVillage || 'Kinathukadavu Village',
+      district: assignedDistrict || 'Coimbatore',
+      state: 'Tamil Nadu',
+      pincode: '642109',
+      latitude: 10.825,
+      longitude: 77.021,
+      assignedWorkerId: 'hw-1',
+      emergencyContactName: 'Family Member',
+      emergencyContactPhone: phone || '+91 94430 00000',
+      conditions: [],
+      allergies: [],
+      medications: []
+    };
+    db.patients.push(patientObj);
+    profile = patientObj;
+  } else if (role === 'HEALTH_WORKER') {
+    const hwObj = {
+      id: 'hw-' + Date.now(),
+      userId,
+      name,
+      workerType: 'VHN' as const,
+      assignedVillage: assignedVillage || 'Kinathukadavu Village',
+      assignedDistrict: assignedDistrict || 'Coimbatore',
+      facilityId: facilityId || 'fac-cbe-phc',
+      phone: newUser.phone
+    };
+    db.healthWorkers.push(hwObj);
+    profile = hwObj;
+  } else if (role === 'DOCTOR') {
+    const docObj = {
+      id: 'doc-' + Date.now(),
+      userId,
+      name,
+      specialization: specialization || 'General Medicine',
+      licenseNumber: licenseNumber || 'TNMC-2026-' + Math.floor(10000 + Math.random() * 90000),
+      facilityId: facilityId || 'fac-cbe-mch',
+      phone: newUser.phone
+    };
+    db.doctors.push(docObj);
+    profile = docObj;
+  } else if (role === 'FACILITY_ADMIN') {
+    const faObj = {
+      id: 'fa-' + Date.now(),
+      userId,
+      name,
+      facilityId: facilityId || 'fac-cbe-mch'
+    };
+    db.facilityAdmins.push(faObj);
+    profile = faObj;
+  }
+
+  db.save();
+
+  db.logAudit({
+    userId,
+    userName: name,
+    userRole: role,
+    action: 'USER_REGISTERED',
+    resource: `User/${userId}`,
+    details: `User registered with role ${role} in Tamil Nadu CareGrid`
+  });
+
+  const token = jwt.sign(
+    { id: newUser.id, email: newUser.email, role: newUser.role, name: newUser.name },
+    ENV.JWT_SECRET,
+    { expiresIn: '7d' }
+  );
+
+  res.status(201).json({
+    token,
+    user: {
+      id: newUser.id,
+      email: newUser.email,
+      name: newUser.name,
+      role: newUser.role,
+      phone: newUser.phone
+    },
+    profile
+  });
+}
+
 // Quick Switcher for Demo / Hackathon Evaluators
 export async function switchPersona(req: AuthRequest, res: Response) {
   const { role, userId } = req.body;
@@ -265,6 +404,99 @@ export async function getFacilityById(req: AuthRequest, res: Response) {
     return;
   }
   res.json(fac);
+}
+
+export async function createFacility(req: AuthRequest, res: Response) {
+  const {
+    name,
+    type,
+    category,
+    address,
+    district,
+    phone,
+    emergencyCapability,
+    totalBeds,
+    occupiedBeds,
+    icuBeds,
+    occupiedIcuBeds,
+    currentQueueLength,
+    averageWaitTimeMin,
+    specialists,
+    services,
+    availableDiagnostics,
+    medicineStockRatio,
+    latitude,
+    longitude
+  } = req.body;
+
+  if (!name || !type || !district) {
+    res.status(400).json({ error: 'Name, facility type, and district are required' });
+    return;
+  }
+
+  // Default coordinate offsets based on Tamil Nadu district centers
+  const districtCoords: Record<string, { lat: number; lng: number }> = {
+    Coimbatore: { lat: 11.002, lng: 76.967 },
+    Chennai: { lat: 13.081, lng: 80.279 },
+    Madurai: { lat: 9.928, lng: 78.134 },
+    Salem: { lat: 11.664, lng: 78.146 },
+    Tiruchirappalli: { lat: 10.812, lng: 78.686 },
+    Thanjavur: { lat: 10.758, lng: 79.106 },
+    Tirunelveli: { lat: 8.714, lng: 77.747 },
+    Vellore: { lat: 12.916, lng: 79.132 },
+    Nilgiris: { lat: 11.410, lng: 76.695 },
+    Dindigul: { lat: 10.367, lng: 77.980 }
+  };
+
+  const defaultCoord = districtCoords[district] || { lat: 11.01, lng: 76.96 };
+  const lat = typeof latitude === 'number' ? latitude : defaultCoord.lat + (Math.random() - 0.5) * 0.05;
+  const lng = typeof longitude === 'number' ? longitude : defaultCoord.lng + (Math.random() - 0.5) * 0.05;
+
+  const newFacility = {
+    id: 'fac-tn-' + Date.now(),
+    name,
+    type: type || 'CHC',
+    category: category || 'Public',
+    latitude: lat,
+    longitude: lng,
+    address: address || `${name}, ${district}, Tamil Nadu`,
+    district,
+    phone: phone || '044-' + Math.floor(10000000 + Math.random() * 90000000),
+    emergencyCapability: Boolean(emergencyCapability),
+    totalBeds: Number(totalBeds) || 50,
+    occupiedBeds: Number(occupiedBeds) || Math.floor((Number(totalBeds) || 50) * 0.6),
+    icuBeds: Number(icuBeds) || 4,
+    occupiedIcuBeds: Number(occupiedIcuBeds) || 2,
+    currentQueueLength: Number(currentQueueLength) || 10,
+    averageWaitTimeMin: Number(averageWaitTimeMin) || 20,
+    specialists: Array.isArray(specialists) && specialists.length > 0 ? specialists : [
+      { specialty: 'General Medicine', available: true, doctorName: 'Dr. Duty Medical Officer' }
+    ],
+    services: Array.isArray(services) && services.length > 0 ? services : [
+      '24x7 Emergency Care',
+      'Outpatient Consultation',
+      'Pharmacy',
+      'Basic Pathology'
+    ],
+    availableDiagnostics: Array.isArray(availableDiagnostics) && availableDiagnostics.length > 0 ? availableDiagnostics : [
+      'ECG 12-Lead',
+      'Digital X-Ray',
+      'Complete Blood Count'
+    ],
+    medicineStockRatio: typeof medicineStockRatio === 'number' ? medicineStockRatio : 0.92
+  };
+
+  db.addFacility(newFacility);
+
+  db.logAudit({
+    userName: req.user?.name || 'Administrator',
+    userRole: req.user?.role || 'FACILITY_ADMIN',
+    action: 'FACILITY_REGISTERED',
+    resource: `Facility/${newFacility.id}`,
+    details: `Added new hospital ${newFacility.name} (${newFacility.type}) in ${district}, Tamil Nadu`
+  });
+
+  res.status(201).json(newFacility);
 }
 
 export async function recommendFacilitiesController(req: AuthRequest, res: Response) {

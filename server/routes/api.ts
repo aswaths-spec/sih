@@ -6,6 +6,7 @@ const router = Router();
 
 // ================= PUBLIC AUTH & DEMO ROUTES =================
 router.post('/auth/login', ctrl.login);
+router.post('/auth/register', ctrl.register);
 router.post('/auth/switch-persona', ctrl.switchPersona);
 router.post('/auth/reset-demo', ctrl.resetDemo);
 router.get('/auth/me', authenticateToken, ctrl.getCurrentUser);
@@ -17,6 +18,7 @@ router.post('/triage/confirm', authenticateToken, requireRole('HEALTH_WORKER', '
 // ================= FACILITIES & CAPACITY ROUTING =================
 router.get('/facilities', authenticateToken, ctrl.getFacilities);
 router.get('/facilities/:id', authenticateToken, ctrl.getFacilityById);
+router.post('/facilities', authenticateToken, ctrl.createFacility);
 router.post('/facilities/recommend', authenticateToken, ctrl.recommendFacilitiesController);
 router.patch(
   '/facilities/:id/capacity',

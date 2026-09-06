@@ -21,14 +21,17 @@ interface FacilityRoutingViewProps {
   initialUrgency?: TriageUrgency;
   initialSpecialty?: string;
   onInitiateReferral: (facilityId: string, facilityName: string) => void;
+  onOpenAddHospital?: () => void;
 }
 
 export const FacilityRoutingView: React.FC<FacilityRoutingViewProps> = ({
   initialUrgency = 'ORANGE',
   initialSpecialty = 'Cardiology',
-  onInitiateReferral
+  onInitiateReferral,
+  onOpenAddHospital
 }) => {
-  const { t } = useAuth();
+  const { t, language } = useAuth();
+  const isTamil = language === 'ta';
 
   const [urgency, setUrgency] = useState<TriageUrgency>(initialUrgency);
   const [specialty, setSpecialty] = useState<string>(initialSpecialty);
@@ -83,16 +86,30 @@ export const FacilityRoutingView: React.FC<FacilityRoutingViewProps> = ({
           <p className="text-xs text-slate-500 mt-1 max-w-2xl">{t.routing.subtitle}</p>
         </div>
 
-        {/* Demo Scenario 2 Quick Preset Button */}
-        <button
-          id="btn-scenario-2-preset"
-          type="button"
-          onClick={handleScenario2Preset}
-          className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-bold text-teal-900 bg-teal-50 hover:bg-teal-100 border border-teal-300 rounded-xl transition shadow-2xs self-start sm:self-auto"
-        >
-          <Sparkles className="w-4 h-4 text-teal-600" />
-          <span>Test Scenario 2: Specialist Routing</span>
-        </button>
+        <div className="flex flex-wrap items-center gap-2 self-start sm:self-auto">
+          {onOpenAddHospital && (
+            <button
+              id="btn-feed-hospital-routing"
+              type="button"
+              onClick={onOpenAddHospital}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-bold text-white bg-teal-600 hover:bg-teal-700 rounded-xl transition shadow-2xs"
+            >
+              <Building2 className="w-4 h-4" />
+              <span>{isTamil ? '+ மருத்துவமனை சேர்க்க' : '+ Feed Hospital Data'}</span>
+            </button>
+          )}
+
+          {/* Demo Scenario 2 Quick Preset Button */}
+          <button
+            id="btn-scenario-2-preset"
+            type="button"
+            onClick={handleScenario2Preset}
+            className="inline-flex items-center gap-2 px-3.5 py-2 text-xs font-bold text-teal-900 bg-teal-50 hover:bg-teal-100 border border-teal-300 rounded-xl transition shadow-2xs"
+          >
+            <Sparkles className="w-4 h-4 text-teal-600" />
+            <span>Test Scenario 2: Specialist Routing</span>
+          </button>
+        </div>
       </div>
 
       {/* Prominent Clinical Nearest vs Best Warning */}

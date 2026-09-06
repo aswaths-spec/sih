@@ -29,6 +29,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenScenarios, activeTab, setA
     setLanguage,
     t,
     switchPersona,
+    logout,
     isOffline,
     setIsOffline,
     resetDemo,
@@ -40,11 +41,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenScenarios, activeTab, setA
   const [resetting, setResetting] = useState(false);
 
   const personas: { role: UserRole; name: string; title: string }[] = [
-    { role: 'HEALTH_WORKER', name: 'Sunita Gaikwad', title: 'ASHA / Health Worker (Primary Care)' },
-    { role: 'PATIENT', name: 'Ramesh Patil', title: 'Rural Patient (Shirur Village)' },
-    { role: 'DOCTOR', name: 'Dr. Vivek Sharma', title: 'Medical Specialist (Cardiologist)' },
-    { role: 'FACILITY_ADMIN', name: 'Rajesh Deshmukh', title: 'Facility Admin (Civil Hospital)' },
-    { role: 'SYSTEM_ADMIN', name: 'Dr. Anita Roy', title: 'District Health Officer (DHO)' }
+    { role: 'HEALTH_WORKER', name: 'Meenakshi Sundaram', title: 'VHN / Health Worker (Kinathukadavu, Coimbatore)' },
+    { role: 'DOCTOR', name: 'Dr. K. Senthil Nathan', title: 'Cardiologist (CMCH Coimbatore)' },
+    { role: 'PATIENT', name: 'Murugan Shanmugam', title: 'Rural Patient (Kinathukadavu Village)' },
+    { role: 'FACILITY_ADMIN', name: 'Dr. S. Anbarasan', title: 'Facility Admin (CMCH Coimbatore)' },
+    { role: 'SYSTEM_ADMIN', name: 'Dr. P. Arumugam', title: 'DDHS Coimbatore (Tamil Nadu Health System)' }
   ];
 
   const handleRoleSelect = async (role: UserRole) => {
@@ -135,6 +136,19 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenScenarios, activeTab, setA
                       {user?.role === p.role && <Check className="w-4 h-4 text-teal-600" />}
                     </button>
                   ))}
+                  <div className="border-t border-slate-100 mt-1 pt-1 px-1">
+                    <button
+                      type="button"
+                      id="btn-navbar-logout"
+                      onClick={() => {
+                        setRoleDropdownOpen(false);
+                        logout();
+                      }}
+                      className="w-full text-left px-3 py-1.5 text-xs text-rose-700 hover:bg-rose-50 rounded-lg transition font-medium flex items-center justify-between"
+                    >
+                      <span>{language === 'ta' ? 'கணக்கிலிருந்து வெளியேறு (Sign Out)' : 'Sign Out / Switch Account'}</span>
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
@@ -176,6 +190,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenScenarios, activeTab, setA
                 }`}
               >
                 मराठी
+              </button>
+              <button
+                type="button"
+                id="btn-lang-ta"
+                onClick={() => setLanguage('ta')}
+                className={`px-2 py-1 rounded-md transition ${
+                  language === 'ta'
+                    ? 'bg-white text-teal-800 font-bold shadow-2xs'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                தமிழ்
               </button>
             </div>
 

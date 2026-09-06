@@ -14,6 +14,7 @@ interface AuthContextType {
   isOffline: boolean;
   setIsOffline: (offline: boolean) => void;
   login: (email: string, pass: string) => Promise<void>;
+  register: (payload: any) => Promise<void>;
   switchPersona: (role: UserRole, userId?: string) => Promise<void>;
   logout: () => void;
   resetDemo: () => Promise<void>;
@@ -63,25 +64,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setUser(res.user);
           setProfile(res.profile);
         } catch (err) {
-          console.warn('Session expired or invalid, auto-logging in as default Patient persona');
-          await autoLoginDefault();
+          console.warn('Session expired or invalid, clearing token');
+          setStoredToken(null);
+          setToken(null);
+          setUser(null);
+          setProfile(null);
         }
-      } else {
-        await autoLoginDefault();
       }
       setLoading(false);
-    }
-
-    async function autoLoginDefault() {
-      try {
-        const res = await api.switchPersona('HEALTH_WORKER');
-        setStoredToken(res.token);
-        setToken(res.token);
-        setUser(res.user);
-        setProfile(res.profile);
-      } catch (e) {
-        console.error('Initial auto-login failed:', e);
-      }
     }
 
     initSession();
@@ -89,6 +79,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const login = async (email: string, pass: string) => {
     const res = await api.login(email, pass);
+    setStoredToken(res.token);
+    setToken(res.token);
+    setUser(res.user);
+    setProfile(res.profile);
+  };
+
+  const register = async (payload: any) => {
+    const res = await api.register(payload);
     setStoredToken(res.token);
     setToken(res.token);
     setUser(res.user);
@@ -141,6 +139,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         isOffline,
         setIsOffline,
         login,
+        register,
         switchPersona,
         logout,
         resetDemo,
