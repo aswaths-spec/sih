@@ -1,0 +1,6 @@
+{
+  "name": "CareGrid",
+  "description": "Intelligent healthcare care-coordination platform connecting rural and underserved patients across triage, capacity-aware facility routing, referral handshake, diagnostics, treatment, and follow-up.",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

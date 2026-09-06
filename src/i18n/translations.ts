@@ -1,0 +1,331 @@
+export type Language = 'en' | 'hi' | 'mr';
+
+export const translations = {
+  en: {
+    appTitle: 'CareGrid',
+    appSubtitle: 'Public Healthcare Care-Coordination Platform',
+    missionStatement: 'Connecting patients from their current situation to the next appropriate step across triage, facility selection, referral, diagnostics, treatment, and follow-up.',
+    nav: {
+      triage: 'Digital Triage',
+      routing: 'Facility Routing',
+      referrals: 'Referral Handshake',
+      journey: 'Care Journey',
+      careGaps: 'Care-Gap Radar',
+      dashboard: 'Dashboard',
+      offline: 'Offline Pack',
+      records: 'Health Record',
+      medicines: 'Medicine Stock',
+      audit: 'Audit Log'
+    },
+    roles: {
+      PATIENT: 'Patient',
+      HEALTH_WORKER: 'Health Worker (ASHA/ANM)',
+      DOCTOR: 'Medical Specialist',
+      FACILITY_ADMIN: 'Facility Admin',
+      SYSTEM_ADMIN: 'System Admin (DHO)'
+    },
+    triage: {
+      title: 'AI-Assisted Digital Triage',
+      disclaimer: 'AI-assisted triage. Final clinical decision must be confirmed by an authorized healthcare professional.',
+      symptomsLabel: 'Patient Symptoms & Chief Complaint',
+      symptomsPlaceholder: 'Describe symptoms (e.g., chest heaviness, breathing difficulty, fever for 3 days)...',
+      speakButton: 'Speak Symptoms',
+      listening: 'Listening... (Speak in English, Hindi, or Marathi)',
+      durationLabel: 'Duration of Symptoms',
+      vitalsSection: 'Vitals & Clinical Measurements (Optional)',
+      bp: 'Blood Pressure (Sys/Dia)',
+      heartRate: 'Heart Rate (bpm)',
+      spo2: 'Oxygen Saturation SpO2 (%)',
+      temp: 'Temperature (°F)',
+      evaluateButton: 'Evaluate Triage Urgency',
+      redEmergency: 'RED - Emergency',
+      orangePriority: 'ORANGE - Priority',
+      greenRoutine: 'GREEN - Routine',
+      reasonsTitle: 'Clinical Reasons for Classification',
+      warningSignsTitle: 'Warning Signs & Risk Alerts',
+      nextActionTitle: 'Recommended Next Clinical Action',
+      confirmButton: 'Confirm as Health Worker',
+      routeButton: 'Find Best Facility & Route Now'
+    },
+    routing: {
+      title: 'Intelligent & Capacity-Aware Facility Routing',
+      subtitle: 'Multi-criteria clinical scoring considering emergency capability, specialist availability, bed capacity, wait times, and diagnostics.',
+      nearestWarning: 'Notice: The nearest clinic may lack critical specialists or beds. CareGrid routes to the most clinically appropriate facility.',
+      scoreLabel: 'CareGrid Match Score',
+      distance: 'Distance',
+      travelTime: 'Est. Travel Time',
+      reasonsWhy: 'Why this facility is recommended:',
+      specialists: 'Specialists On-Duty',
+      bedsAvailable: 'Beds Free',
+      queueLength: 'Current Queue',
+      createReferral: 'Initiate Referral Handshake'
+    },
+    referral: {
+      title: 'Referral Handshake Lifecycle',
+      subtitle: 'Transparent handoff tracking from community health worker to receiving hospital specialist.',
+      inbox: 'Incoming Referral Inbox',
+      outbound: 'Community Referrals Tracker',
+      code: 'Referral Code',
+      patient: 'Patient',
+      from: 'Referring Provider',
+      target: 'Target Facility',
+      status: 'Current Status',
+      accept: 'Accept Patient',
+      reject: 'Decline / Re-route',
+      markArrived: 'Mark Patient Arrived',
+      completeConsult: 'Complete Consultation',
+      tokenIssued: 'OPD Token Assigned'
+    },
+    journey: {
+      title: 'Continuous Patient Care Journey',
+      subtitle: 'From fragmented healthcare to one seamless, tracked care pathway.',
+      nextStepHeader: 'What should I do next?',
+      completed: 'Completed',
+      inProgress: 'Current Step',
+      upcoming: 'Upcoming',
+      delayed: 'Action Required'
+    },
+    careGaps: {
+      title: 'Care-Gap Radar',
+      subtitle: 'Proactive surveillance detecting missed appointments, delayed referrals, overdue diagnostics, and lost-to-follow-up patients.',
+      detected: 'Detected Gaps',
+      overdue: 'Overdue',
+      acknowledge: 'Acknowledge',
+      contact: 'Record Patient Contact',
+      resolve: 'Mark Gap Resolved'
+    },
+    offline: {
+      title: 'Smart Offline Care Pack',
+      subtitle: 'Empowering rural ASHA and ANM health workers with offline-first synchronization.',
+      downloadPack: 'Download Smart Care Pack',
+      syncNow: 'Synchronize Changes Now',
+      lastSynced: 'Last Synchronized',
+      syncStatus: 'Sync Status',
+      offlineActive: 'Operating in Offline Mode'
+    },
+    scenarios: {
+      scenario1Title: 'Demo Scenario 1: Primary Rural Care Journey',
+      scenario1Desc: 'Rural patient with acute symptoms → Triage → Health Worker confirmation → Facility routing → Referral accepted → Appointment token → Care journey updated → Overdue follow-up detected on Care-Gap Radar.',
+      scenario2Title: 'Demo Scenario 2: Specialist Capacity Routing',
+      scenario2Desc: 'Patient needs Specialist Care: Nearest PHC (5km) has high wait & no specialist vs Sub-District Hospital (18km) with specialist + diagnostics ready → CareGrid selects the best facility.'
+    }
+  },
+  hi: {
+    appTitle: 'केयरग्रिड (CareGrid)',
+    appSubtitle: 'सार्वजनिक स्वास्थ्य देखभाल समन्वय मंच',
+    missionStatement: 'रोगी को उसकी वर्तमान स्वास्थ्य स्थिति से ट्राइएज, अस्पताल चयन, रेफरल, परीक्षण, उपचार और फॉलो-अप तक जोड़ना।',
+    nav: {
+      triage: 'डिजिटल ट्राइएज',
+      routing: 'अस्पताल रूटिंग',
+      referrals: 'रेफरल हैंडशेक',
+      journey: 'देखभाल यात्रा',
+      careGaps: 'केयर-गैप रडार',
+      dashboard: 'डैशबोर्ड',
+      offline: 'ऑफलाइन पैक',
+      records: 'स्वास्थ्य रिकॉर्ड',
+      medicines: 'दवा उपलब्धता',
+      audit: 'ऑडिट लॉग'
+    },
+    roles: {
+      PATIENT: 'मरीज़ (Patient)',
+      HEALTH_WORKER: 'स्वास्थ्य कार्यकर्ता (आशा/एएनएम)',
+      DOCTOR: 'चिकित्सा विशेषज्ञ (Doctor)',
+      FACILITY_ADMIN: 'अस्पताल प्रबंधक',
+      SYSTEM_ADMIN: 'जिला स्वास्थ्य अधिकारी (DHO)'
+    },
+    triage: {
+      title: 'एआई-सहायता प्राप्त डिजिटल ट्राइएज',
+      disclaimer: 'एआई-सहायता प्राप्त ट्राइएज। अंतिम नैदानिक निर्णय अधिकृत स्वास्थ्य पेशेवर द्वारा पुष्टि होना आवश्यक है।',
+      symptomsLabel: 'मरीज़ के लक्षण एवं मुख्य शिकायत',
+      symptomsPlaceholder: 'लक्षण बताएं (जैसे छाती में जकड़न, सांस फूलना, 3 दिन से तेज बुखार)...',
+      speakButton: 'बोलकर लक्षण दर्ज करें',
+      listening: 'सुन रहे हैं... (हिंदी, मराठी या अंग्रेजी में बोलें)',
+      durationLabel: 'लक्षणों की अवधि',
+      vitalsSection: 'महत्वपूर्ण लक्षण / वाइटल्स (वैकल्पिक)',
+      bp: 'रक्तचाप (सिस्टोलिक/डायस्टोलिक)',
+      heartRate: 'हृदय गति (bpm)',
+      spo2: 'ऑक्सीजन स्तर SpO2 (%)',
+      temp: 'तापमान (°F)',
+      evaluateButton: 'ट्राइएज जांचें',
+      redEmergency: 'लाल - आपातकालीन (RED Emergency)',
+      orangePriority: 'नारंगी - प्राथमिकता (ORANGE Priority)',
+      greenRoutine: 'हरा - सामान्य (GREEN Routine)',
+      reasonsTitle: 'वर्गीकरण के नैदानिक कारण',
+      warningSignsTitle: 'चेतावनी संकेत एवं खतरे के लक्षण',
+      nextActionTitle: 'अनुशंसित अगला नैदानिक कदम',
+      confirmButton: 'स्वास्थ्य कार्यकर्ता के रूप में पुष्टि करें',
+      routeButton: 'उपयुक्त अस्पताल खोजें'
+    },
+    routing: {
+      title: 'बुद्धिमान एवं क्षमता-जागरूक अस्पताल चयन',
+      subtitle: 'दूरी, आपातकालीन सुविधा, विशेषज्ञ उपलब्धता, बिस्तर क्षमता और परीक्षणों के आधार पर पारदर्शी चयन।',
+      nearestWarning: 'ध्यान दें: निकटतम अस्पताल में विशेषज्ञ या बिस्तर उपलब्ध न होने पर केयरग्रिड उचित बड़े अस्पताल को प्राथमिकता देता है।',
+      scoreLabel: 'केयरग्रिड मैच स्कोर',
+      distance: 'दूरी',
+      travelTime: 'अनुमानित यात्रा समय',
+      reasonsWhy: 'यह अस्पताल क्यों अनुशंसित है:',
+      specialists: 'उपलब्ध विशेषज्ञ',
+      bedsAvailable: 'उपलब्ध बिस्तर',
+      queueLength: 'वर्तमान कतार',
+      createReferral: 'रेफरल हैंडशेक शुरू करें'
+    },
+    referral: {
+      title: 'रेफरल हैंडशेक जीवनचक्र',
+      subtitle: 'ग्रामीण स्वास्थ्य कार्यकर्ता से अस्पताल विशेषज्ञ तक पूर्ण समन्वय।',
+      inbox: 'आगमन रेफरल इनबॉक्स',
+      outbound: 'भेजे गए रेफरल ट्रैकर',
+      code: 'रेफरल कोड',
+      patient: 'मरीज़',
+      from: 'भेजने वाला कार्यकर्ता',
+      target: 'लक्षित अस्पताल',
+      status: 'वर्तमान स्थिति',
+      accept: 'मरीज़ स्वीकार करें',
+      reject: 'अस्वीकार / अन्य विकल्प',
+      markArrived: 'मरीज़ उपस्थित दर्ज करें',
+      completeConsult: 'परामर्श पूर्ण',
+      tokenIssued: 'ओपीडी टोकन जारी'
+    },
+    journey: {
+      title: 'सतत रोगी देखभाल यात्रा',
+      subtitle: 'बिखरी हुई स्वास्थ्य सेवाओं से एक निरंतर देखभाल मार्ग तक।',
+      nextStepHeader: 'मुझे आगे क्या करना चाहिए?',
+      completed: 'पूर्ण',
+      inProgress: 'वर्तमान कदम',
+      upcoming: 'आगामी',
+      delayed: 'कार्रवाई आवश्यक'
+    },
+    careGaps: {
+      title: 'केयर-गैप रडार (Care-Gap Radar)',
+      subtitle: 'छूटे हुए अपॉइंटमेंट, विलंबित रेफरल और छूटे हुए फॉलो-अप की निगरानी।',
+      detected: 'पहचाने गए अंतराल',
+      overdue: 'अतिदेय (Overdue)',
+      acknowledge: 'स्वीकार करें',
+      contact: 'संपर्क दर्ज करें',
+      resolve: 'समस्या का समाधान दर्ज करें'
+    },
+    offline: {
+      title: 'स्मार्ट ऑफलाइन केयर पैक',
+      subtitle: 'ग्रामीण आशा/एएनएम कार्यकर्ताओं के लिए बिना इंटरनेट काम करने की सुविधा।',
+      downloadPack: 'केयर पैक डाउनलोड करें',
+      syncNow: 'अभी सिंक करें',
+      lastSynced: 'अंतिम सिंक समय',
+      syncStatus: 'सिंक स्थिति',
+      offlineActive: 'ऑफलाइन मोड सक्रिय'
+    },
+    scenarios: {
+      scenario1Title: 'डेमो परिदृश्य 1: प्राथमिक ग्रामीण देखभाल यात्रा',
+      scenario1Desc: 'ग्रामीण मरीज़ के गंभीर लक्षण → ट्राइएज → आशा कार्यकर्ता की पुष्टि → अस्पताल रूटिंग → रेफरल स्वीकृति → टोकन → देखभाल यात्रा → केयर-गैप रडार अलर्ट।',
+      scenario2Title: 'डेमो परिदृश्य 2: विशेषज्ञ क्षमता रूटिंग',
+      scenario2Desc: 'मरीज़ को हृदय रोग विशेषज्ञ चाहिए: निकटतम पीएचसी (5 किमी) में डॉक्टर नहीं बनाम जिला अस्पताल (18 किमी) विशेषज्ञ व परीक्षण तैयार → केयरग्रिड सही चयन करता है।'
+    }
+  },
+  mr: {
+    appTitle: 'केअरग्रिड (CareGrid)',
+    appSubtitle: 'सार्वजनिक आरोग्य सेवा समन्वय प्रणाली',
+    missionStatement: 'रुग्णाला त्यांच्या सध्याच्या आरोग्यावस्थेपासून ट्रायज, रुग्णालय निवड, संदर्भ, तपासणी, उपचार आणि पाठपुराव्यापर्यंत योग्य टप्प्याशी जोडणे.',
+    nav: {
+      triage: 'डिजिटल ट्रायज',
+      routing: 'रुग्णालय निवड',
+      referrals: 'रेफरल हँडशेक',
+      journey: 'आरोग्य प्रवास',
+      careGaps: 'केअर-गॅप रडार',
+      dashboard: 'डॅशबोर्ड',
+      offline: 'ऑफलाईन पॅक',
+      records: 'आरोग्य नोंदी',
+      medicines: 'औषध साठा',
+      audit: 'ऑडिट लॉग'
+    },
+    roles: {
+      PATIENT: 'रुग्ण (Patient)',
+      HEALTH_WORKER: 'आरोग्य सेविका (आशा/एएनएम)',
+      DOCTOR: 'वैद्यकीय तज्ज्ञ (Doctor)',
+      FACILITY_ADMIN: 'रुग्णालय प्रशासक',
+      SYSTEM_ADMIN: 'जिल्हा आरोग्य अधिकारी (DHO)'
+    },
+    triage: {
+      title: 'एआय-सहाय्यित डिजिटल ट्रायज',
+      disclaimer: 'एआय-सहाय्यित ट्रायज. अंतिम वैद्यकीय निर्णय अधिकृत आरोग्य व्यावसायिकाने निश्चित करणे आवश्यक आहे.',
+      symptomsLabel: 'रुग्णाची लक्षणे व मुख्य तक्रार',
+      symptomsPlaceholder: 'लक्षणे नोंदवा (उदा. छातीत दुखणे, दम लागणे, गार घाम, चक्कर)...',
+      speakButton: 'बोलून लक्षणे सांगा',
+      listening: 'ऐकत आहोत... (मराठी, हिंदी किंवा इंग्रजीत बोला)',
+      durationLabel: 'लक्षणांचा कालावधी',
+      vitalsSection: 'महत्त्वाची लक्षणे / व्हायटल्स (ऐच्छिक)',
+      bp: 'रक्तदाब (सिस्टोलिक/डायस्टोलिक)',
+      heartRate: 'हृदयाचे ठोके (bpm)',
+      spo2: 'ऑक्सिजन पातळी SpO2 (%)',
+      temp: 'तापमान (°F)',
+      evaluateButton: 'ट्रायज तपासा',
+      redEmergency: 'लाल - तात्काळ आणीबाणी (RED Emergency)',
+      orangePriority: 'केशरी - प्राधान्य (ORANGE Priority)',
+      greenRoutine: 'हिरवा - नेहमीचे (GREEN Routine)',
+      reasonsTitle: 'वर्गीकरणाची वैद्यकीय कारणे',
+      warningSignsTitle: 'धोक्याचे इशारे व सूचना',
+      nextActionTitle: 'पुढील शिफारस केलेले वैद्यकीय पाऊल',
+      confirmButton: 'आरोग्य सेविका म्हणून खात्री करा',
+      routeButton: 'योग्य रुग्णालय निवडा'
+    },
+    routing: {
+      title: 'कार्यक्षम व क्षमता-आधारित रुग्णालय निवड',
+      subtitle: 'अंतर, आणीबाणी क्षमता, तज्ज्ञ उपलब्धता, खाटांची क्षमता आणि चाचण्या विचारात घेऊन पारदर्शक निवड.',
+      nearestWarning: 'सूचना: जवळच्या दवाखान्यात तज्ज्ञ किंवा खाटा नसल्यास केअरग्रिड योग्य सुसज्ज रुग्णालयाची शिफारस करते.',
+      scoreLabel: 'केअरग्रिड जुळवणी गुण',
+      distance: 'अंतर',
+      travelTime: 'अंदाजे प्रवासाची वेळ',
+      reasonsWhy: 'हे रुग्णालय का शिफारस केले आहे:',
+      specialists: 'उपलब्ध तज्ज्ञ डॉक्टर',
+      bedsAvailable: 'उपलब्ध खाटा',
+      queueLength: 'सध्याची रांग',
+      createReferral: 'रेफरल हँडशेक सुरू करा'
+    },
+    referral: {
+      title: 'रेफरल हँडशेक जीवनचक्र',
+      subtitle: 'आशा सेविकेपासून ते जिल्हा रुग्णालयातील तज्ज्ञापर्यंत अखंड संदर्भ समन्वय.',
+      inbox: 'येणारे रेफरल इनबॉक्स',
+      outbound: 'पाठवलेले रेफरल ट्रॅकर',
+      code: 'रेफरल क्रमांक',
+      patient: 'रुग्ण',
+      from: 'संदर्भ देणारी सेविका',
+      target: 'लक्षित रुग्णालय',
+      status: 'सद्यस्थिती',
+      accept: 'रुग्ण स्वीकारा',
+      reject: 'नाकारा / दुसरा पर्याय',
+      markArrived: 'रुग्ण दाखल झाला',
+      completeConsult: 'तपासणी पूर्ण',
+      tokenIssued: 'ओपीडी टोकन तयार'
+    },
+    journey: {
+      title: 'अखंड रुग्ण काळजी प्रवास (Care Journey)',
+      subtitle: 'तुकड्या-तुकड्यात विभागलेल्या सेवेकडून एका सलग उपचार मार्गाकडे.',
+      nextStepHeader: 'मी पुढे काय करावे?',
+      completed: 'पूर्ण',
+      inProgress: 'सध्याचा टप्पा',
+      upcoming: 'पुढील टप्पा',
+      delayed: 'कार्रवाई आवश्यक'
+    },
+    careGaps: {
+      title: 'केअर-गॅप रडार (Care-Gap Radar)',
+      subtitle: 'चुकलेली तपासणी, प्रलंबित रेफरल आणि पाठपुराव्याकडे दुर्लक्ष झालेल्या रुग्णांची स्वयंचलित सूचना प्रणाली.',
+      detected: 'नोंदवलेले खंड',
+      overdue: 'मुदत संपलेले (Overdue)',
+      acknowledge: 'दखल घ्या',
+      contact: 'रुग्णाशी संपर्क नोंदवा',
+      resolve: 'समस्या निवारण नोंदवा'
+    },
+    offline: {
+      title: 'स्मार्ट ऑफलाइन केअर पॅक',
+      subtitle: 'ग्रामीण भागातील आशा व एएनएम सेविकांसाठी इंटरनेट नसतानाही काम करण्याची सोय.',
+      downloadPack: 'केअर पॅक डाऊनलोड करा',
+      syncNow: 'माहिती आता सिंक करा',
+      lastSynced: 'शेवटचे सिंक',
+      syncStatus: 'सिंक स्थिती',
+      offlineActive: 'ऑफलाइन मोड सक्रिय'
+    },
+    scenarios: {
+      scenario1Title: 'डेमो प्रसंग १: प्राथमिक ग्रामीण रुग्ण सेवा प्रवास',
+      scenario1Desc: 'ग्रामीण रुग्णाला छातीत दुखणे → ट्रायज → आशा सेविकेची खात्री → रुग्णालय निवड → रेफरल स्वीकार → टोकन → आरोग्य प्रवास → पाठपुरावा चुकल्यास रडार अलर्ट.',
+      scenario2Title: 'डेमो प्रसंग २: तज्ज्ञ डॉक्टर व क्षमता निवड',
+      scenario2Desc: 'रुग्णाला हृदयविकार तज्ज्ञांची गरज: जवळच्या प्राथमिक केंद्रात तज्ज्ञ नाहीत vs जिल्हा रुग्णालयात तज्ज्ञ व चाचण्या उपलब्ध → केअरग्रिड अचूक निवड करते.'
+    }
+  }
+};

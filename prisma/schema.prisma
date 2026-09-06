@@ -1,0 +1,469 @@
+// CareGrid PostgreSQL Database Schema
+// Production relational database schema designed for Smart India Hackathon & public healthcare care-coordination
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  PATIENT
+  HEALTH_WORKER
+  DOCTOR
+  FACILITY_ADMIN
+  SYSTEM_ADMIN
+}
+
+enum TriageUrgency {
+  RED       // Emergency
+  ORANGE    // Priority
+  GREEN     // Routine
+}
+
+enum ReferralStatus {
+  CREATED
+  SENT
+  RECEIVED
+  UNDER_REVIEW
+  ACCEPTED
+  REJECTED
+  APPOINTMENT_ASSIGNED
+  PATIENT_ARRIVED
+  CONSULTATION_COMPLETED
+  FOLLOWUP_REQUIRED
+  COMPLETED
+}
+
+enum AppointmentStatus {
+  REQUESTED
+  CONFIRMED
+  RESCHEDULED
+  CANCELLED
+  COMPLETED
+  MISSED
+}
+
+enum CareGapStatus {
+  OPEN
+  ACKNOWLEDGED
+  CONTACTED
+  RESOLVED
+}
+
+enum ConsentStatus {
+  GRANT
+  REVOKE
+  EXPIRE
+}
+
+enum DiagnosticStatus {
+  REQUESTED
+  AVAILABLE
+  SCHEDULED
+  COMPLETED
+  OVERDUE
+}
+
+model User {
+  id           String      @id @default(uuid())
+  email        String      @unique
+  passwordHash String
+  name         String
+  phone        String?
+  role         Role
+  avatarUrl    String?
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  patient      Patient?
+  healthWorker HealthWorker?
+  doctor       Doctor?
+  facilityAdmin FacilityAdmin?
+  auditLogs    AuditLog[]
+  notifications Notification[]
+}
+
+model Patient {
+  id             String            @id @default(uuid())
+  userId         String            @unique
+  user           User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  abhaId         String?           @unique // ABDM Ayushman Bharat Health Account ID
+  dateOfBirth    DateTime
+  gender         String
+  bloodGroup     String?
+  addressVillage String
+  district       String
+  state          String
+  pincode        String
+  assignedWorkerId String?
+  assignedWorker HealthWorker?     @relation(fields: [assignedWorkerId], references: [id])
+  emergencyContactName String?
+  emergencyContactPhone String?
+
+  conditions     PatientCondition[]
+  allergies      Allergy[]
+  medications    Medication[]
+  triages        TriageAssessment[]
+  referrals      Referral[]
+  appointments   Appointment[]
+  careJourneys   CareJourney[]
+  careGaps       CareGap[]
+  followUps      FollowUp[]
+  consents       Consent[]
+  diagnosticRequests DiagnosticRequest[]
+  teleconsultations Teleconsultation[]
+}
+
+model HealthWorker {
+  id              String      @id @default(uuid())
+  userId          String      @unique
+  user            User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workerType      String      // ASHA, ANM, MPW, Community Health Officer
+  assignedVillage String
+  assignedDistrict String
+  facilityId      String?
+  facility        Facility?   @relation(fields: [facilityId], references: [id])
+
+  patients        Patient[]
+  createdReferrals Referral[] @relation("ReferringWorker")
+  careGaps        CareGap[]
+  followUps       FollowUp[]
+  offlineSyncRecords OfflineSyncRecord[]
+}
+
+model Doctor {
+  id             String       @id @default(uuid())
+  userId         String       @unique
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  specialization String
+  licenseNumber  String
+  facilityId     String
+  facility       Facility     @relation(fields: [facilityId], references: [id])
+
+  consultations  Consultation[]
+  receivedReferrals Referral[] @relation("AssignedDoctor")
+  diagnosticRequests DiagnosticRequest[]
+}
+
+model FacilityAdmin {
+  id         String   @id @default(uuid())
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  facilityId String
+  facility   Facility @relation(fields: [facilityId], references: [id])
+}
+
+model Facility {
+  id                  String      @id @default(uuid())
+  name                String
+  type                String      // Rural PHC, Community Health Centre (CHC), Sub-District Hospital, District Hospital, Specialist Medical College
+  category            String      // Public, Trust, Associated
+  latitude            Float
+  longitude           Float
+  address             String
+  district            String
+  phone               String
+  emergencyCapability Boolean     @default(false)
+  totalBeds           Int         @default(20)
+  occupiedBeds        Int         @default(5)
+  icuBeds             Int         @default(0)
+  occupiedIcuBeds     Int         @default(0)
+  currentQueueLength  Int         @default(8)
+  averageWaitTimeMin  Int         @default(25)
+
+  specialists         Specialist[]
+  services            FacilityService[]
+  medicines           Medicine[]
+  doctors             Doctor[]
+  healthWorkers       HealthWorker[]
+  facilityAdmins      FacilityAdmin[]
+  incomingReferrals   Referral[]  @relation("ReceivingFacility")
+  appointments        Appointment[]
+  diagnosticRequests  DiagnosticRequest[]
+}
+
+model Specialist {
+  id         String   @id @default(uuid())
+  facilityId String
+  facility   Facility @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+  name       String
+  specialty  String   // Cardiology, Obstetrics/Gynecology, Pediatrics, General Medicine, Orthopedics, Pulmonology
+  available  Boolean  @default(true)
+  nextSlot   DateTime?
+}
+
+model FacilityService {
+  id          String   @id @default(uuid())
+  facilityId  String
+  facility    Facility @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+  serviceName String   // Triage, 24x7 Emergency, X-Ray, ECG, Pathology Lab, Blood Bank, Ultrasound, Neonatal ICU
+  isAvailable Boolean  @default(true)
+  queueCount  Int      @default(0)
+}
+
+model Medicine {
+  id          String   @id @default(uuid())
+  facilityId  String
+  facility    Facility @relation(fields: [facilityId], references: [id], onDelete: Cascade)
+  name        String
+  category    String
+  stockCount  Int
+  unit        String   // tablets, vials, bottles, strips
+  isAvailable Boolean  @default(true)
+  lastUpdated DateTime @default(now())
+}
+
+model TriageAssessment {
+  id                String        @id @default(uuid())
+  patientId         String
+  patient           Patient       @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  symptoms          String
+  symptomsList      String[]
+  duration          String
+  vitalsJson        String?       // BP, pulse, temp, spo2
+  urgency           TriageUrgency
+  reasons           String[]
+  warningSigns      String[]
+  recommendedAction String
+  confidenceScore   Float         @default(0.95)
+  humanConfirmed    Boolean       @default(false)
+  confirmedByWorker String?
+  aiClinicalSummary String?
+  createdAt         DateTime      @default(now())
+
+  referral          Referral?
+}
+
+model Referral {
+  id                  String             @id @default(uuid())
+  referralCode        String             @unique // E.g. REF-2026-1049
+  patientId           String
+  patient             Patient            @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  triageId            String?            @unique
+  triage              TriageAssessment?  @relation(fields: [triageId], references: [id])
+  referringWorkerId   String?
+  referringWorker     HealthWorker?      @relation("ReferringWorker", fields: [referringWorkerId], references: [id])
+  targetFacilityId    String
+  targetFacility      Facility           @relation("ReceivingFacility", fields: [targetFacilityId], references: [id])
+  assignedDoctorId    String?
+  assignedDoctor      Doctor?            @relation("AssignedDoctor", fields: [assignedDoctorId], references: [id])
+  reasonForReferral   String
+  clinicalSummary     String
+  status              ReferralStatus     @default(CREATED)
+  rejectionReason     String?
+  alternativeFacility String?
+  priorityLevel       String             // EMERGENCY, URGENT, ROUTINE
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+
+  statusHistory       ReferralStatusHistory[]
+  appointments        Appointment[]
+  careJourneys        CareJourney[]
+}
+
+model ReferralStatusHistory {
+  id         String         @id @default(uuid())
+  referralId String
+  referral   Referral       @relation(fields: [referralId], references: [id], onDelete: Cascade)
+  status     ReferralStatus
+  notes      String?
+  updatedBy  String
+  timestamp  DateTime       @default(now())
+}
+
+model Appointment {
+  id           String            @id @default(uuid())
+  appointmentNo String           @unique // E.g. APT-8812
+  tokenNumber  String            // E.g. TK-DH-042
+  patientId    String
+  patient      Patient           @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  facilityId   String
+  facility     Facility          @relation(fields: [facilityId], references: [id])
+  referralId   String?
+  referral     Referral?         @relation(fields: [referralId], references: [id])
+  scheduledFor DateTime
+  status       AppointmentStatus @default(CONFIRMED)
+  department   String
+  estimatedWaitMinutes Int       @default(20)
+  createdAt    DateTime          @default(now())
+}
+
+model CareJourney {
+  id          String            @id @default(uuid())
+  patientId   String
+  patient     Patient           @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  referralId  String?
+  referral    Referral?         @relation(fields: [referralId], references: [id])
+  title       String
+  overallStatus String          // ACTIVE, COMPLETED, DELAYED
+  currentStage String
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  steps       CareJourneyStep[]
+}
+
+model CareJourneyStep {
+  id           String      @id @default(uuid())
+  journeyId    String
+  journey      CareJourney @relation(fields: [journeyId], references: [id], onDelete: Cascade)
+  stepOrder    Int
+  name         String      // Initial consultation, Triage, Referral, Hospital acceptance, Appointment, Diagnostic test, Specialist consultation, Treatment, Follow-up
+  status       String      // COMPLETED, IN_PROGRESS, UPCOMING, DELAYED
+  scheduledAt  DateTime?
+  completedAt  DateTime?
+  notes        String?
+  actionRequired String?
+}
+
+model CareGap {
+  id                 String        @id @default(uuid())
+  patientId          String
+  patient            Patient       @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  gapType            String        // MISSED_APPOINTMENT, PENDING_REFERRAL, DIAGNOSTIC_OVERDUE, FOLLOWUP_OVERDUE, HIGH_RISK_UNREVIEWED
+  severity           String        // CRITICAL, HIGH, MODERATE
+  dueDate            DateTime
+  detectedDate       DateTime      @default(now())
+  responsibleWorkerId String?
+  responsibleWorker  HealthWorker? @relation(fields: [responsibleWorkerId], references: [id])
+  status             CareGapStatus @default(OPEN)
+  actionTaken        String?
+  resolutionNotes    String?
+  updatedAt          DateTime      @updatedAt
+}
+
+model FollowUp {
+  id                 String        @id @default(uuid())
+  patientId          String
+  patient            Patient       @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  responsibleWorkerId String?
+  responsibleWorker  HealthWorker? @relation(fields: [responsibleWorkerId], references: [id])
+  dueDate            DateTime
+  reason             String
+  isCompleted        Boolean       @default(false)
+  completedAt        DateTime?
+  notes              String?
+  missedAlertRaised  Boolean       @default(false)
+}
+
+model DiagnosticRequest {
+  id             String           @id @default(uuid())
+  testName       String
+  patientId      String
+  patient        Patient          @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  requestingDoctorId String?
+  requestingDoctor Doctor?        @relation(fields: [requestingDoctorId], references: [id])
+  facilityId     String
+  facility       Facility         @relation(fields: [facilityId], references: [id])
+  status         DiagnosticStatus @default(REQUESTED)
+  requiredDate   DateTime
+  scheduledDate  DateTime?
+  resultSummary  String?
+  createdAt      DateTime         @default(now())
+}
+
+model Consultation {
+  id               String   @id @default(uuid())
+  doctorId         String
+  doctor           Doctor   @relation(fields: [doctorId], references: [id])
+  patientId        String
+  clinicalNotes    String
+  diagnosis        String
+  prescriptionJson String?
+  recommendedTests String[]
+  followUpDays     Int      @default(7)
+  createdAt        DateTime @default(now())
+}
+
+model PatientCondition {
+  id         String   @id @default(uuid())
+  patientId  String
+  patient    Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  name       String
+  diagnosedOn DateTime
+  status     String   // ACTIVE, RESOLVED, CHRONIC
+}
+
+model Allergy {
+  id        String  @id @default(uuid())
+  patientId String
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  substance String
+  severity  String  // MILD, SEVERE, LIFE_THREATENING
+}
+
+model Medication {
+  id        String  @id @default(uuid())
+  patientId String
+  patient   Patient @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  name      String
+  dosage    String
+  frequency String
+  isActive  Boolean @default(true)
+}
+
+model Consent {
+  id            String        @id @default(uuid())
+  patientId     String
+  patient       Patient       @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  requestedBy   String        // E.g. "District Hospital Ward 4"
+  purpose       String        // E.g. "Care Coordination & Diagnostic Review"
+  dataScope     String        // ALL, CONSULTATIONS, DIAGNOSTICS, MEDICATIONS
+  status        ConsentStatus @default(GRANT)
+  createdAt     DateTime      @default(now())
+  expiresAt     DateTime
+}
+
+model Teleconsultation {
+  id             String   @id @default(uuid())
+  patientId      String
+  patient        Patient  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  provider       String   // eSanjeevani Mock Adapter
+  roomUrl        String
+  sessionToken   String
+  status         String   // SCHEDULED, IN_PROGRESS, COMPLETED, CANCELLED
+  scheduledAt    DateTime
+  notes          String?
+  createdAt      DateTime @default(now())
+}
+
+model OfflineSyncRecord {
+  id             String       @id @default(uuid())
+  healthWorkerId String
+  healthWorker   HealthWorker @relation(fields: [healthWorkerId], references: [id], onDelete: Cascade)
+  entityType     String
+  entityId       String
+  action         String       // CREATE, UPDATE
+  payloadJson    String
+  syncStatus     String       // PENDING, SYNCED, CONFLICT
+  clientTimestamp DateTime
+  syncedAt       DateTime?
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  userId      String?
+  user        User?    @relation(fields: [userId], references: [id])
+  action      String   // LOGIN, LOGOUT, TRIAGE_ASSESSMENT, REFERRAL_CREATE, REFERRAL_ACCEPT, CONSENT_UPDATE, CARE_GAP_RESOLVED
+  resource    String
+  details     String?
+  ipAddress   String?
+  userAgent   String?
+  timestamp   DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String
+  message   String
+  type      String   // EMERGENCY, REFERRAL, APPOINTMENT, CARE_GAP, DIAGNOSTIC
+  isRead    Boolean  @default(false)
+  linkUrl   String?
+  createdAt DateTime @default(now())
+}
