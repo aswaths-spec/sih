@@ -1,4 +1,5 @@
-export type UserRole = 'PATIENT' | 'HEALTH_WORKER' | 'DOCTOR' | 'FACILITY_ADMIN' | 'SYSTEM_ADMIN';
+export type UserRole = 'PATIENT' | 'ASHA_WORKER' | 'HOSPITAL_DOCTOR' | 'ADMIN';
+export type AnyUserRole = UserRole | 'HEALTH_WORKER' | 'DOCTOR' | 'FACILITY_ADMIN' | 'SYSTEM_ADMIN';
 
 export type TriageUrgency = 'RED' | 'ORANGE' | 'GREEN';
 
@@ -16,6 +17,10 @@ export type ReferralStatus =
   | 'COMPLETED';
 
 export type AppointmentStatus =
+  | 'PENDING'
+  | 'ACCEPTED'
+  | 'DECLINED'
+  | 'REFERRED'
   | 'REQUESTED'
   | 'CONFIRMED'
   | 'RESCHEDULED'
@@ -36,6 +41,11 @@ export interface User {
   name: string;
   phone?: string;
   role: UserRole;
+  patientId?: string;
+  workerId?: string;
+  doctorId?: string;
+  facilityId?: string;
+  active?: boolean;
   avatarUrl?: string;
   createdAt: string;
 }
@@ -188,6 +198,12 @@ export interface Appointment {
   department: string;
   doctorId?: string;
   doctorName?: string;
+  disease?: string;
+  healthIssue?: string;
+  declineReason?: string;
+  referredFacilityId?: string;
+  referredFacilityName?: string;
+  referredSpecialty?: string;
   scheduledFor?: string;
   scheduledDate?: string;
   timeSlot?: string;
@@ -217,6 +233,9 @@ export interface CareJourney {
   patientId: string;
   patientName?: string;
   referralId?: string;
+  appointmentId?: string;
+  facilityName?: string;
+  tokenNumber?: string;
   title: string;
   overallStatus: 'ACTIVE' | 'COMPLETED' | 'DELAYED';
   currentStage: string;

@@ -196,9 +196,37 @@ export const api = {
     referralId?: string;
     scheduledFor: string;
     department: string;
+    disease?: string;
+    healthIssue?: string;
     notes?: string;
   }) =>
     request<Appointment>('/appointments', {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    }),
+
+  acceptAppointment: (id: string, notes?: string) =>
+    request<Appointment>(`/appointments/${id}/accept`, {
+      method: 'POST',
+      body: JSON.stringify({ notes })
+    }),
+
+  declineAppointment: (id: string, reason?: string) =>
+    request<Appointment>(`/appointments/${id}/decline`, {
+      method: 'POST',
+      body: JSON.stringify({ reason })
+    }),
+
+  referAppointment: (
+    id: string,
+    payload: {
+      targetFacilityId: string;
+      reason: string;
+      priority?: 'EMERGENCY' | 'URGENT' | 'ROUTINE';
+      specialty?: string;
+    }
+  ) =>
+    request<{ appointment: Appointment; referral: any }>(`/appointments/${id}/refer`, {
       method: 'POST',
       body: JSON.stringify(payload)
     }),
@@ -212,6 +240,21 @@ export const api = {
   // Care Journey
   getCareJourney: (patientId?: string) =>
     request<CareJourney>(patientId ? `/care-journey/${patientId}` : '/care-journey'),
+
+  advanceCareJourney: (patientId: string) =>
+    request<CareJourney>(`/care-journey/${patientId}/advance`, {
+      method: 'POST'
+    }),
+
+  treatPatientFull: (patientId: string) =>
+    request<CareJourney>(`/care-journey/${patientId}/treat-full`, {
+      method: 'POST'
+    }),
+
+  resetCareJourney: (patientId: string) =>
+    request<CareJourney>(`/care-journey/${patientId}/reset`, {
+      method: 'POST'
+    }),
 
   // Care-Gap Radar
   getCareGaps: () => request<CareGap[]>('/care-gaps'),
@@ -296,5 +339,22 @@ export const api = {
   markNotificationRead: (id: string) =>
     request<{ success: boolean }>(`/notifications/${id}/read`, {
       method: 'PATCH'
-    })
+    }),
+
+  // Admin Management
+  getAdminUsers: () => request<any[]>('/admin/users'),
+
+  updateAdminUserRole: (id: string, role: string) =>
+    request<any>(`/admin/users/${id}/role`, {
+      method: 'PATCH',
+      body: JSON.stringify({ role })
+    }),
+
+  updateAdminUserStatus: (id: string, active: boolean) =>
+    request<any>(`/admin/users/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ active })
+    }),
+
+  getAdminDoctors: () => request<any[]>('/admin/doctors')
 };

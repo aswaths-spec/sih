@@ -11,6 +11,7 @@ import { CareJourneyView } from './components/CareJourneyView';
 import { CareGapRadarView } from './components/CareGapRadarView';
 import { HealthWorkerOfflineView } from './components/HealthWorkerOfflineView';
 import { PatientRecordsView } from './components/PatientRecordsView';
+import { AdminDashboardView } from './components/AdminDashboardView';
 import { DemoScenariosModal } from './components/DemoScenariosModal';
 import { TriageUrgency } from './types';
 import {
@@ -20,7 +21,8 @@ import {
   FileText,
   HelpCircle,
   PhoneCall,
-  Lock
+  Lock,
+  AlertCircle
 } from 'lucide-react';
 
 const MainApp: React.FC = () => {
@@ -29,6 +31,25 @@ const MainApp: React.FC = () => {
   const [scenariosOpen, setScenariosOpen] = useState(false);
   const [addHospitalOpen, setAddHospitalOpen] = useState(false);
   const [facilityKey, setFacilityKey] = useState(0);
+
+  // Sync activeTab when user or role changes
+  React.useEffect(() => {
+    if (!user) return;
+    if (user.role === 'PATIENT') {
+      const patientAllowed = ['journey', 'triage', 'referrals', 'records'];
+      if (!patientAllowed.includes(activeTab)) {
+        setActiveTab('journey');
+      }
+    } else if (user.role === 'ADMIN' || user.role === 'SYSTEM_ADMIN') {
+      if (activeTab === 'triage') {
+        setActiveTab('admin');
+      }
+    } else if (user.role === 'HOSPITAL_DOCTOR' || user.role === 'DOCTOR') {
+      if (activeTab === 'triage') {
+        setActiveTab('referrals');
+      }
+    }
+  }, [user?.role]);
 
   // Routing navigation pre-fill state
   const [routingUrgency, setRoutingUrgency] = useState<TriageUrgency>('RED');
@@ -98,6 +119,47 @@ const MainApp: React.FC = () => {
 
       {/* Main Feature View Canvas */}
       <main className="flex-1 pb-16">
+        {/* Patient-restricted tabs warning */}
+        {user.role === 'PATIENT' && !['journey', 'triage', 'referrals', 'records'].includes(activeTab) && (
+          <div className="max-w-xl mx-auto mt-12 p-8 bg-white rounded-3xl border border-slate-200 shadow-xl text-center space-y-4">
+            <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-600 flex items-center justify-center mx-auto border border-amber-200">
+              <Lock className="w-6 h-6" />
+            </div>
+            <h2 className="text-lg font-bold text-slate-900">Restricted Access (Patient Role)</h2>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              This section is designated for authorized healthcare workers and administrators.
+              As a patient, you have access to your personal Care Journey, reporting health problems, viewing referrals, and accessing health records.
+            </p>
+            <button
+              type="button"
+              onClick={() => setActiveTab('journey')}
+              className="px-4 py-2 rounded-xl bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs transition shadow-sm"
+            >
+              Go to My Care Journey
+            </button>
+          </div>
+        )}
+
+        {/* Admin-restricted tab warning for non-admin */}
+        {activeTab === 'admin' && user.role !== 'ADMIN' && user.role !== 'SYSTEM_ADMIN' && user.role !== 'FACILITY_ADMIN' && (
+          <div className="max-w-xl mx-auto mt-12 p-8 bg-white rounded-3xl border border-rose-200 shadow-xl text-center space-y-4">
+            <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto border border-rose-200">
+              <Lock className="w-6 h-6" />
+            </div>
+            <h2 className="text-lg font-bold text-slate-900">Restricted to Administrators</h2>
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Role-Based User Management, Audit Logs, and Capacity Overrides require System Administrator privileges.
+            </p>
+            <button
+              type="button"
+              onClick={() => setActiveTab(user.role === 'PATIENT' ? 'journey' : user.role === 'HOSPITAL_DOCTOR' ? 'referrals' : 'triage')}
+              className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs transition shadow-sm"
+            >
+              Return to Authorized Workspace
+            </button>
+          </div>
+        )}
+
         {activeTab === 'triage' && (
           <TriageView onNavigateToRouting={handleNavigateToRouting} />
         )}
@@ -119,13 +181,17 @@ const MainApp: React.FC = () => {
           />
         )}
 
-        {activeTab === 'journey' && <CareJourneyView />}
+        {activeTab === 'journey' && <CareJourneyView onNavigateTab={setActiveTab} />}
 
         {activeTab === 'careGaps' && <CareGapRadarView />}
 
         {activeTab === 'records' && <PatientRecordsView />}
 
         {activeTab === 'offline' && <HealthWorkerOfflineView />}
+
+        {activeTab === 'admin' && (user.role === 'ADMIN' || user.role === 'SYSTEM_ADMIN' || user.role === 'FACILITY_ADMIN') && (
+          <AdminDashboardView onOpenAddHospital={() => setAddHospitalOpen(true)} />
+        )}
       </main>
 
       {/* Guided Demo Walkthrough Modal */}

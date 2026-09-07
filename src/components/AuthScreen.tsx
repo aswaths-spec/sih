@@ -189,24 +189,25 @@ export const AuthScreen: React.FC = () => {
             <div className="border-t border-slate-700/80 pt-4">
               <p className="text-2xs font-bold text-teal-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
                 <Sparkles className="w-3.5 h-3.5 text-teal-400" />
-                {isTamil ? '1-கிளிக் உடனடி முன்னோட்ட உள்நுழைவு' : '1-Click Instant Persona Access'}
+                {isTamil ? '1-கிளிக் உடனடி முன்னோட்ட உள்நுழைவு (4 முதன்மை பாத்திரங்கள்)' : '1-Click Instant Persona Access (4 Roles)'}
               </p>
               <div className="space-y-2">
                 <button
                   type="button"
-                  onClick={() => handleDemoSignIn('HEALTH_WORKER')}
+                  id="btn-persona-asha"
+                  onClick={() => handleDemoSignIn('ASHA_WORKER')}
                   className="w-full text-left p-2.5 rounded-xl bg-slate-700/50 hover:bg-slate-700 border border-slate-600/60 hover:border-teal-500/50 transition flex items-center justify-between group"
                 >
                   <div className="flex items-center gap-2.5">
                     <div className="w-7 h-7 rounded-lg bg-teal-500/20 text-teal-300 flex items-center justify-center font-bold text-xs">
-                      VHN
+                      ASHA
                     </div>
                     <div>
                       <div className="text-xs font-semibold text-white group-hover:text-teal-300">
-                        {isTamil ? 'மீனாட்சி சுந்தரம் (VHN)' : 'Meenakshi Sundaram (VHN)'}
+                        {isTamil ? 'மீனாட்சி சுந்தரம் (ASHA Worker)' : 'Meenakshi Sundaram (ASHA Worker)'}
                       </div>
                       <div className="text-2xs text-slate-400">
-                        {isTamil ? 'கிராம சுகாதார செவிலியர் - கிணத்துக்கடவு, கோவை' : 'Health Worker — Kinathukadavu, Coimbatore'}
+                        {isTamil ? 'கள செவிலியர் - கிணத்துக்கடவு, கோவை' : 'ASHA Health Worker — Kinathukadavu, Coimbatore'}
                       </div>
                     </div>
                   </div>
@@ -215,19 +216,20 @@ export const AuthScreen: React.FC = () => {
 
                 <button
                   type="button"
-                  onClick={() => handleDemoSignIn('DOCTOR')}
+                  id="btn-persona-doctor"
+                  onClick={() => handleDemoSignIn('HOSPITAL_DOCTOR')}
                   className="w-full text-left p-2.5 rounded-xl bg-slate-700/50 hover:bg-slate-700 border border-slate-600/60 hover:border-teal-500/50 transition flex items-center justify-between group"
                 >
                   <div className="flex items-center gap-2.5">
                     <div className="w-7 h-7 rounded-lg bg-indigo-500/20 text-indigo-300 flex items-center justify-center font-bold text-xs">
-                      Dr
+                      DOC
                     </div>
                     <div>
                       <div className="text-xs font-semibold text-white group-hover:text-indigo-300">
-                        {isTamil ? 'Dr. K. செந்தில் நாதன்' : 'Dr. K. Senthil Nathan'}
+                        {isTamil ? 'Dr. K. செந்தில் நாதன் (Hospital Doctor)' : 'Dr. K. Senthil Nathan (Hospital Doctor)'}
                       </div>
                       <div className="text-2xs text-slate-400">
-                        {isTamil ? 'இதய சிகிச்சை நிபுணர் - CMCH கோவை' : 'Cardiologist — CMCH Coimbatore'}
+                        {isTamil ? 'இதய சிகிச்சை மருத்துவர் - CMCH கோவை' : 'Hospital Doctor & Cardiologist — CMCH Coimbatore'}
                       </div>
                     </div>
                   </div>
@@ -236,16 +238,17 @@ export const AuthScreen: React.FC = () => {
 
                 <button
                   type="button"
+                  id="btn-persona-patient"
                   onClick={() => handleDemoSignIn('PATIENT')}
                   className="w-full text-left p-2.5 rounded-xl bg-slate-700/50 hover:bg-slate-700 border border-slate-600/60 hover:border-teal-500/50 transition flex items-center justify-between group"
                 >
                   <div className="flex items-center gap-2.5">
                     <div className="w-7 h-7 rounded-lg bg-emerald-500/20 text-emerald-300 flex items-center justify-center font-bold text-xs">
-                      PT
+                      PAT
                     </div>
                     <div>
                       <div className="text-xs font-semibold text-white group-hover:text-emerald-300">
-                        {isTamil ? 'முருகன் சண்முகம்' : 'Murugan Shanmugam'}
+                        {isTamil ? 'முருகன் சண்முகம் (Patient)' : 'Murugan Shanmugam (Patient)'}
                       </div>
                       <div className="text-2xs text-slate-400">
                         {isTamil ? 'நோயாளி - கிணத்துக்கடவு கிராமம், கோவை' : 'Rural Patient — Kinathukadavu, Coimbatore'}
@@ -257,23 +260,24 @@ export const AuthScreen: React.FC = () => {
 
                 <button
                   type="button"
-                  onClick={() => handleDemoSignIn('FACILITY_ADMIN')}
+                  id="btn-persona-admin"
+                  onClick={() => handleDemoSignIn('ADMIN')}
                   className="w-full text-left p-2.5 rounded-xl bg-slate-700/50 hover:bg-slate-700 border border-slate-600/60 hover:border-teal-500/50 transition flex items-center justify-between group"
                 >
                   <div className="flex items-center gap-2.5">
-                    <div className="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-300 flex items-center justify-center font-bold text-xs">
+                    <div className="w-7 h-7 rounded-lg bg-purple-500/20 text-purple-300 flex items-center justify-center font-bold text-xs">
                       ADM
                     </div>
                     <div>
-                      <div className="text-xs font-semibold text-white group-hover:text-amber-300">
-                        {isTamil ? 'Dr. S. அன்பரசன்' : 'Dr. S. Anbarasan (CMCH Admin)'}
+                      <div className="text-xs font-semibold text-white group-hover:text-purple-300">
+                        {isTamil ? 'Dr. P. ஆறுமுகம் (Health System Admin)' : 'Dr. P. Arumugam (System Admin)'}
                       </div>
                       <div className="text-2xs text-slate-400">
-                        {isTamil ? 'மருத்துவமனை நிர்வாகி - CMCH கோவை' : 'Facility Admin — CMCH Coimbatore'}
+                        {isTamil ? 'DDHS / தமிழ்நாடு சுகாதார அமைப்பு நிர்வாகி' : 'DDHS / Tamil Nadu Health System Administrator'}
                       </div>
                     </div>
                   </div>
-                  <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-amber-300 transition" />
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-purple-300 transition" />
                 </button>
               </div>
             </div>
@@ -385,16 +389,16 @@ export const AuthScreen: React.FC = () => {
                   {[
                     { role: 'PATIENT' as UserRole, labelEn: 'Patient', labelTa: 'நோயாளி', icon: User },
                     {
-                      role: 'HEALTH_WORKER' as UserRole,
-                      labelEn: 'VHN / ASHA',
-                      labelTa: 'சுகாதார செவிலியர்',
+                      role: 'ASHA_WORKER' as UserRole,
+                      labelEn: 'ASHA Worker',
+                      labelTa: 'ஆஷா களப்பணியாளர்',
                       icon: Activity
                     },
-                    { role: 'DOCTOR' as UserRole, labelEn: 'Doctor', labelTa: 'மருத்துவர்', icon: Stethoscope },
+                    { role: 'HOSPITAL_DOCTOR' as UserRole, labelEn: 'Hospital Doctor', labelTa: 'மருத்துவமனை மருத்துவர்', icon: Stethoscope },
                     {
-                      role: 'FACILITY_ADMIN' as UserRole,
-                      labelEn: 'Hospital Admin',
-                      labelTa: 'மருத்துவமனை நிர்வாகி',
+                      role: 'ADMIN' as UserRole,
+                      labelEn: 'Administrator',
+                      labelTa: 'சுகாதார நிர்வாகி',
                       icon: Building2
                     }
                   ].map(r => {

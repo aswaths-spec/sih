@@ -3,6 +3,7 @@ import path from 'path';
 import bcrypt from 'bcryptjs';
 import {
   User,
+  UserRole,
   Patient,
   HealthWorker,
   Doctor,
@@ -78,6 +79,7 @@ class Database {
       if (fs.existsSync(DB_FILE)) {
         const raw = fs.readFileSync(DB_FILE, 'utf-8');
         this.data = JSON.parse(raw);
+        this.normalizeRolesAndSeedUsers();
         this.initialized = true;
       } else {
         this.seedInitialData();
@@ -86,6 +88,89 @@ class Database {
     } catch (err) {
       console.warn('Could not read DB file, seeding fresh in-memory database:', err);
       this.seedInitialData();
+    }
+  }
+
+  private normalizeRolesAndSeedUsers() {
+    if (!this.data.users) this.data.users = [];
+    const salt = bcrypt.genSaltSync(8);
+    const passwordHash = bcrypt.hashSync('CareGrid@123', salt);
+    const isoNow = new Date().toISOString();
+
+    // Map any legacy role to one of the 4 valid roles
+    for (const u of this.data.users) {
+      if ((u.role as any) === 'HEALTH_WORKER') u.role = 'ASHA_WORKER';
+      else if ((u.role as any) === 'DOCTOR') u.role = 'HOSPITAL_DOCTOR';
+      else if ((u.role as any) === 'FACILITY_ADMIN' || (u.role as any) === 'SYSTEM_ADMIN') u.role = 'ADMIN';
+      if (u.active === undefined) u.active = true;
+    }
+
+    const demoAccounts: User[] = [
+      {
+        id: 'usr-demo-patient',
+        email: 'patient@example.com',
+        passwordHash,
+        name: 'Murugan Shanmugam',
+        phone: '+91 94430 11234',
+        role: 'PATIENT',
+        patientId: 'pat-1',
+        active: true,
+        createdAt: isoNow
+      },
+      {
+        id: 'usr-demo-asha',
+        email: 'asha@example.com',
+        passwordHash,
+        name: 'Meenakshi Sundaram (ASHA)',
+        phone: '+91 94430 55678',
+        role: 'ASHA_WORKER',
+        workerId: 'hw-1',
+        active: true,
+        createdAt: isoNow
+      },
+      {
+        id: 'usr-demo-doctor',
+        email: 'doctor@example.com',
+        passwordHash,
+        name: 'Dr. K. Senthil Nathan',
+        phone: '+91 94430 88990',
+        role: 'HOSPITAL_DOCTOR',
+        doctorId: 'doc-1',
+        facilityId: 'fac-cbe-mch',
+        active: true,
+        createdAt: isoNow
+      },
+      {
+        id: 'usr-demo-admin',
+        email: 'admin@example.com',
+        passwordHash,
+        name: 'CareGrid Administrator',
+        phone: '+91 94430 66778',
+        role: 'ADMIN',
+        active: true,
+        createdAt: isoNow
+      }
+    ];
+
+    for (const demo of demoAccounts) {
+      const existing = this.data.users.find(u => u.email.toLowerCase() === demo.email.toLowerCase());
+      if (!existing) {
+        this.data.users.unshift(demo);
+      } else {
+        existing.role = demo.role;
+        if (demo.patientId) existing.patientId = demo.patientId;
+        if (demo.workerId) existing.workerId = demo.workerId;
+        if (demo.doctorId) existing.doctorId = demo.doctorId;
+        if (demo.facilityId) existing.facilityId = demo.facilityId;
+        if (existing.active === undefined) existing.active = true;
+      }
+    }
+
+    // Normalize appointments status to uppercase or standard
+    if (this.data.appointments) {
+      for (const apt of this.data.appointments) {
+        if (!apt.status) apt.status = 'PENDING';
+      }
     }
   }
 
@@ -109,8 +194,52 @@ class Database {
     const now = new Date();
     const isoNow = now.toISOString();
 
-    // 1. USERS
+    // 1. USERS (Exactly the 4 Required Roles: PATIENT, ASHA_WORKER, HOSPITAL_DOCTOR, ADMIN)
     const users: User[] = [
+      {
+        id: 'usr-demo-patient',
+        email: 'patient@example.com',
+        passwordHash,
+        name: 'Murugan Shanmugam',
+        phone: '+91 94430 11234',
+        role: 'PATIENT',
+        patientId: 'pat-1',
+        active: true,
+        createdAt: isoNow
+      },
+      {
+        id: 'usr-demo-asha',
+        email: 'asha@example.com',
+        passwordHash,
+        name: 'Meenakshi Sundaram (ASHA)',
+        phone: '+91 94430 55678',
+        role: 'ASHA_WORKER',
+        workerId: 'hw-1',
+        active: true,
+        createdAt: isoNow
+      },
+      {
+        id: 'usr-demo-doctor',
+        email: 'doctor@example.com',
+        passwordHash,
+        name: 'Dr. K. Senthil Nathan',
+        phone: '+91 94430 88990',
+        role: 'HOSPITAL_DOCTOR',
+        doctorId: 'doc-1',
+        facilityId: 'fac-cbe-mch',
+        active: true,
+        createdAt: isoNow
+      },
+      {
+        id: 'usr-demo-admin',
+        email: 'admin@example.com',
+        passwordHash,
+        name: 'CareGrid Administrator',
+        phone: '+91 94430 66778',
+        role: 'ADMIN',
+        active: true,
+        createdAt: isoNow
+      },
       {
         id: 'usr-pat-1',
         email: 'murugan.patient@caregrid.tn.gov.in',
@@ -118,6 +247,8 @@ class Database {
         name: 'Murugan Shanmugam',
         phone: '+91 94430 11234',
         role: 'PATIENT',
+        patientId: 'pat-1',
+        active: true,
         createdAt: isoNow
       },
       {
@@ -127,6 +258,8 @@ class Database {
         name: 'Selvi Ramanathan',
         phone: '+91 94430 44556',
         role: 'PATIENT',
+        patientId: 'pat-2',
+        active: true,
         createdAt: isoNow
       },
       {
@@ -136,15 +269,19 @@ class Database {
         name: 'Ramasamy Thevar',
         phone: '+91 94430 77889',
         role: 'PATIENT',
+        patientId: 'pat-3',
+        active: true,
         createdAt: isoNow
       },
       {
         id: 'usr-hw-1',
         email: 'meenakshi.vhn@caregrid.tn.gov.in',
         passwordHash,
-        name: 'Meenakshi Sundaram (VHN)',
+        name: 'Meenakshi Sundaram (ASHA)',
         phone: '+91 94430 55678',
-        role: 'HEALTH_WORKER',
+        role: 'ASHA_WORKER',
+        workerId: 'hw-1',
+        active: true,
         createdAt: isoNow
       },
       {
@@ -153,7 +290,10 @@ class Database {
         passwordHash,
         name: 'Dr. K. Senthil Nathan',
         phone: '+91 94430 88990',
-        role: 'DOCTOR',
+        role: 'HOSPITAL_DOCTOR',
+        doctorId: 'doc-1',
+        facilityId: 'fac-cbe-mch',
+        active: true,
         createdAt: isoNow
       },
       {
@@ -162,7 +302,10 @@ class Database {
         passwordHash,
         name: 'Dr. Radhika Balasubramanian',
         phone: '+91 94430 99001',
-        role: 'DOCTOR',
+        role: 'HOSPITAL_DOCTOR',
+        doctorId: 'doc-2',
+        facilityId: 'fac-cbe-mch',
+        active: true,
         createdAt: isoNow
       },
       {
@@ -171,7 +314,8 @@ class Database {
         passwordHash,
         name: 'Dr. S. Anbarasan (CMCH Admin)',
         phone: '+91 94430 33445',
-        role: 'FACILITY_ADMIN',
+        role: 'ADMIN',
+        active: true,
         createdAt: isoNow
       },
       {
@@ -180,7 +324,8 @@ class Database {
         passwordHash,
         name: 'Dr. P. Arumugam (DDHS Coimbatore)',
         phone: '+91 94430 66778',
-        role: 'SYSTEM_ADMIN',
+        role: 'ADMIN',
+        active: true,
         createdAt: isoNow
       }
     ];
@@ -1091,6 +1236,24 @@ class Database {
   // Add a user to the database
   public addUser(user: User) {
     this.data.users.push(user);
+    this.save();
+    return user;
+  }
+
+  // Update user role
+  public updateUserRole(userId: string, role: UserRole) {
+    const user = this.data.users.find(u => u.id === userId);
+    if (!user) return null;
+    user.role = role;
+    this.save();
+    return user;
+  }
+
+  // Update user active status
+  public updateUserStatus(userId: string, active: boolean) {
+    const user = this.data.users.find(u => u.id === userId);
+    if (!user) return null;
+    user.active = active;
     this.save();
     return user;
   }

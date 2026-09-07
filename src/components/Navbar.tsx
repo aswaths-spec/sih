@@ -13,7 +13,8 @@ import {
   PlayCircle,
   ShieldCheck,
   ChevronDown,
-  Check
+  Check,
+  Shield
 } from 'lucide-react';
 
 interface NavbarProps {
@@ -41,16 +42,68 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenScenarios, activeTab, setA
   const [resetting, setResetting] = useState(false);
 
   const personas: { role: UserRole; name: string; title: string }[] = [
-    { role: 'HEALTH_WORKER', name: 'Meenakshi Sundaram', title: 'VHN / Health Worker (Kinathukadavu, Coimbatore)' },
-    { role: 'DOCTOR', name: 'Dr. K. Senthil Nathan', title: 'Cardiologist (CMCH Coimbatore)' },
+    { role: 'ASHA_WORKER', name: 'Meenakshi Sundaram', title: 'ASHA Worker / VHN (Kinathukadavu, Coimbatore)' },
+    { role: 'HOSPITAL_DOCTOR', name: 'Dr. K. Senthil Nathan', title: 'Hospital Doctor & Cardiologist (CMCH Coimbatore)' },
     { role: 'PATIENT', name: 'Murugan Shanmugam', title: 'Rural Patient (Kinathukadavu Village)' },
-    { role: 'FACILITY_ADMIN', name: 'Dr. S. Anbarasan', title: 'Facility Admin (CMCH Coimbatore)' },
-    { role: 'SYSTEM_ADMIN', name: 'Dr. P. Arumugam', title: 'DDHS Coimbatore (Tamil Nadu Health System)' }
+    { role: 'ADMIN', name: 'Dr. P. Arumugam', title: 'System Administrator (Tamil Nadu Health System)' }
   ];
 
   const handleRoleSelect = async (role: UserRole) => {
     setRoleDropdownOpen(false);
     await switchPersona(role);
+  };
+
+  const isTamil = language === 'ta';
+
+  const getAllowedTabs = () => {
+    const role = user?.role;
+    if (role === 'PATIENT') {
+      return [
+        { id: 'journey', label: isTamil ? 'என் சுகாதாரப் பாதை' : 'My Care Journey', icon: PlayCircle },
+        { id: 'triage', label: isTamil ? 'அறிகுறிகள் & ட்ரையேஜ்' : 'Report Problem / Triage', icon: Activity },
+        { id: 'referrals', label: isTamil ? 'என் பரிந்துரைகள் & டோக்கன்' : 'My Referrals & OPD Tokens', icon: UserCheck },
+        { id: 'records', label: isTamil ? 'சுகாதார பதிவுகள்' : 'My Health Records', icon: Globe }
+      ];
+    }
+    if (role === 'ASHA_WORKER' || role === 'HEALTH_WORKER') {
+      return [
+        { id: 'triage', label: t.nav.triage, icon: Activity },
+        { id: 'records', label: t.nav.records, icon: Globe },
+        { id: 'routing', label: t.nav.routing, icon: ShieldCheck },
+        { id: 'referrals', label: t.nav.referrals, icon: UserCheck },
+        { id: 'careGaps', label: t.nav.careGaps, icon: Bell },
+        { id: 'journey', label: t.nav.journey, icon: PlayCircle },
+        { id: 'offline', label: t.nav.offline, icon: WifiOff }
+      ];
+    }
+    if (role === 'HOSPITAL_DOCTOR' || role === 'DOCTOR') {
+      return [
+        { id: 'referrals', label: isTamil ? 'மருத்துவமனை பரிந்துரைகள்' : 'Inbound Referrals & Appointments', icon: UserCheck },
+        { id: 'routing', label: isTamil ? 'படுக்கை திறன் & ட்ரையேஜ்' : 'Bed Capacity & Routing', icon: ShieldCheck },
+        { id: 'records', label: isTamil ? 'நோயாளி மருத்துவ ஆவணங்கள்' : 'EHR Patient Records', icon: Globe },
+        { id: 'journey', label: t.nav.journey, icon: PlayCircle },
+        { id: 'triage', label: t.nav.triage, icon: Activity },
+        { id: 'careGaps', label: t.nav.careGaps, icon: Bell }
+      ];
+    }
+    if (role === 'ADMIN' || role === 'FACILITY_ADMIN' || role === 'SYSTEM_ADMIN') {
+      return [
+        { id: 'admin', label: isTamil ? 'நிர்வாக கட்டுப்பாட்டு மையம் (RBAC)' : 'System Admin (RBAC)', icon: Shield },
+        { id: 'routing', label: t.nav.routing, icon: ShieldCheck },
+        { id: 'referrals', label: t.nav.referrals, icon: UserCheck },
+        { id: 'journey', label: t.nav.journey, icon: PlayCircle },
+        { id: 'careGaps', label: t.nav.careGaps, icon: Bell },
+        { id: 'records', label: t.nav.records, icon: Globe },
+        { id: 'triage', label: t.nav.triage, icon: Activity }
+      ];
+    }
+    // Fallback default
+    return [
+      { id: 'journey', label: t.nav.journey, icon: PlayCircle },
+      { id: 'triage', label: t.nav.triage, icon: Activity },
+      { id: 'routing', label: t.nav.routing, icon: ShieldCheck },
+      { id: 'referrals', label: t.nav.referrals, icon: UserCheck }
+    ];
   };
 
   const handleReset = async () => {
@@ -246,15 +299,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenScenarios, activeTab, setA
 
         {/* Navigation Tabs */}
         <nav className="flex space-x-1 sm:space-x-4 overflow-x-auto py-2 border-t border-slate-100 no-scrollbar">
-          {[
-            { id: 'triage', label: t.nav.triage, icon: Activity },
-            { id: 'routing', label: t.nav.routing, icon: ShieldCheck },
-            { id: 'referrals', label: t.nav.referrals, icon: UserCheck },
-            { id: 'journey', label: t.nav.journey, icon: PlayCircle },
-            { id: 'careGaps', label: t.nav.careGaps, icon: Bell },
-            { id: 'records', label: t.nav.records, icon: Globe },
-            { id: 'offline', label: t.nav.offline, icon: WifiOff }
-          ].map(item => {
+          {getAllowedTabs().map(item => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
             return (

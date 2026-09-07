@@ -15,12 +15,16 @@ export const translations = {
       offline: 'Offline Pack',
       records: 'Health Record',
       medicines: 'Medicine Stock',
-      audit: 'Audit Log'
+      audit: 'Audit Log',
+      admin: 'Admin Console'
     },
     roles: {
       PATIENT: 'Patient',
-      HEALTH_WORKER: 'Health Worker (ASHA/ANM)',
+      ASHA_WORKER: 'ASHA Worker',
+      HEALTH_WORKER: 'Health Worker (ASHA/VHN)',
+      HOSPITAL_DOCTOR: 'Hospital Doctor',
       DOCTOR: 'Medical Specialist',
+      ADMIN: 'System Administrator',
       FACILITY_ADMIN: 'Facility Admin',
       SYSTEM_ADMIN: 'System Admin (DHO)'
     },
@@ -342,12 +346,16 @@ export const translations = {
       offline: 'ஆஃப்லைன் பேக்',
       records: 'சுகாதார ஆவணம்',
       medicines: 'மருந்து இருப்பு',
-      audit: 'தணிக்கை பதிவு'
+      audit: 'தணிக்கை பதிவு',
+      admin: 'நிர்வாக கட்டுப்பாட்டு மையம்'
     },
     roles: {
       PATIENT: 'நோயாளி',
+      ASHA_WORKER: 'ஆஷா களப்பணியாளர்',
       HEALTH_WORKER: 'கிராம சுகாதார செவிலியர் / ஆஷா',
+      HOSPITAL_DOCTOR: 'மருத்துவமனை மருத்துவர்',
       DOCTOR: 'மருத்துவ நிபுணர்',
+      ADMIN: 'சுகாதார நிர்வாகி',
       FACILITY_ADMIN: 'மருத்துவமனை நிர்வாகி',
       SYSTEM_ADMIN: 'மாவட்ட சுகாதார அலுவலர் (DDHS)'
     },

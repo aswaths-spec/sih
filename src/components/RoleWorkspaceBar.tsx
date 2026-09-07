@@ -42,41 +42,32 @@ export const RoleWorkspaceBar: React.FC<RoleWorkspaceBarProps> = ({
             ? 'தனிநபர் சுகாதாரப் பதிவுகள், ABHA ஒப்புதல் மற்றும் சிகிச்சை பயணம்'
             : 'Personal Health Records, ABDM Consent, and Care Journey tracking'
         };
-      case 'HEALTH_WORKER':
+      case 'ASHA_WORKER':
         return {
-          label: isTamil ? 'சுகாதார களப்பணியாளர் (VHN)' : 'Village Health Nurse (VHN)',
+          label: isTamil ? 'சுகாதார களப்பணியாளர் (ASHA/VHN)' : 'ASHA Worker / VHN',
           icon: Activity,
           bg: 'bg-teal-50 text-teal-800 border-teal-200',
           desc: isTamil
             ? 'கள அவசர பரிசோதனை, திறன் வழி பரிந்துரை மற்றும் ஆஃப்லைன் பேக்'
             : 'Doorstep digital triage, capacity routing, and rural offline packs'
         };
-      case 'DOCTOR':
+      case 'HOSPITAL_DOCTOR':
         return {
-          label: isTamil ? 'மருத்துவ நிபுணர்' : 'Medical Specialist',
+          label: isTamil ? 'மருத்துவமனை மருத்துவர்' : 'Hospital Doctor & Specialist',
           icon: Stethoscope,
           bg: 'bg-indigo-50 text-indigo-800 border-indigo-200',
           desc: isTamil
             ? 'உள்வரும் அவசர பரிந்துரை ஏற்பு, டோக்கன் மேலாண்மை மற்றும் பரிசோதனைகள்'
             : 'Emergency referral intake review, priority queue, and diagnostic orders'
         };
-      case 'FACILITY_ADMIN':
+      case 'ADMIN':
         return {
-          label: isTamil ? 'மருத்துவமனை நிர்வாகி' : 'Hospital Facility Admin',
-          icon: Building2,
-          bg: 'bg-amber-50 text-amber-800 border-amber-200',
-          desc: isTamil
-            ? 'படுக்கை & ICU திறன் மேலாண்மை மற்றும் புதிய மருத்துவமனை தரவு உள்ளீடு'
-            : 'Bed/ICU capacity management and manual hospital data feeding'
-        };
-      case 'SYSTEM_ADMIN':
-        return {
-          label: isTamil ? 'மாவட்ட சுகாதார அதிகாரி (DDHS)' : 'District Health System Admin',
+          label: isTamil ? 'சுகாதார நிர்வாகி (System Admin)' : 'System Administrator (RBAC)',
           icon: Shield,
           bg: 'bg-purple-50 text-purple-800 border-purple-200',
           desc: isTamil
-            ? 'தமிழ்நாடு மாவட்ட சுகாதார பகுப்பாய்வு மற்றும் மருத்துவமனை கட்டமைப்பு'
-            : 'District surveillance, referral handshakes, and hospital directory'
+            ? 'பயனர் பாத்திர மேலாண்மை, தணிக்கை பதிவுகள் மற்றும் மருத்துவமனை படுக்கை திறன்'
+            : 'User RBAC management, system audit logs, and hospital capacity grid'
         };
       default:
         return {
@@ -94,7 +85,9 @@ export const RoleWorkspaceBar: React.FC<RoleWorkspaceBarProps> = ({
   const district =
     profile?.district ||
     profile?.assignedDistrict ||
-    (user.role === 'DOCTOR' || user.role === 'FACILITY_ADMIN' ? 'Coimbatore' : 'Coimbatore');
+    'Coimbatore';
+
+  const isStaffOrAdmin = user.role === 'ADMIN' || user.role === 'HOSPITAL_DOCTOR';
 
   return (
     <div className="bg-white border-b border-slate-200 px-4 sm:px-6 lg:px-8 py-3 shadow-2xs">
@@ -123,33 +116,62 @@ export const RoleWorkspaceBar: React.FC<RoleWorkspaceBarProps> = ({
 
         {/* Right Side: Quick Action Feed Hospital & Logout */}
         <div className="flex items-center gap-2 self-start md:self-auto">
-          {/* Feed Hospital Data Button */}
-          <button
-            type="button"
-            id="btn-feed-hospital"
-            onClick={onOpenAddHospital}
-            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-teal-600 hover:bg-teal-700 rounded-lg shadow-xs transition"
-          >
-            <PlusCircle className="w-3.5 h-3.5" />
-            <span>{isTamil ? 'மருத்துவமனை தரவு உள்ளீடு' : 'Feed Hospital Data'}</span>
-          </button>
-
-          {/* Quick Tab Shortcut based on role */}
-          {user.role === 'PATIENT' && (
+          {/* Feed Hospital Data Button (Staff and Admin only) */}
+          {isStaffOrAdmin && (
             <button
               type="button"
-              onClick={() => setActiveTab('journey')}
-              className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition ${
-                activeTab === 'journey'
-                  ? 'bg-teal-50 border-teal-300 text-teal-800 font-semibold'
-                  : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
-              }`}
+              id="btn-feed-hospital"
+              onClick={onOpenAddHospital}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-teal-600 hover:bg-teal-700 rounded-lg shadow-xs transition"
             >
-              {isTamil ? 'என் சிகிச்சை பயணம்' : 'My Care Journey'}
+              <PlusCircle className="w-3.5 h-3.5" />
+              <span>{isTamil ? 'மருத்துவமனை தரவு உள்ளீடு' : 'Feed Hospital Data'}</span>
             </button>
           )}
 
-          {(user.role === 'DOCTOR' || user.role === 'FACILITY_ADMIN') && (
+          {/* Quick Tab Shortcut based on role */}
+          {user.role === 'PATIENT' && (
+            <>
+              <button
+                type="button"
+                onClick={() => setActiveTab('journey')}
+                className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition ${
+                  activeTab === 'journey'
+                    ? 'bg-emerald-50 border-emerald-300 text-emerald-800 font-semibold'
+                    : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+                }`}
+              >
+                {isTamil ? 'என் சிகிச்சை பயணம்' : 'My Care Journey'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTab('triage')}
+                className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition ${
+                  activeTab === 'triage'
+                    ? 'bg-teal-50 border-teal-300 text-teal-800 font-semibold'
+                    : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+                }`}
+              >
+                {isTamil ? 'பிரச்சினை பதிவு' : 'Report Problem'}
+              </button>
+            </>
+          )}
+
+          {user.role === 'ADMIN' && (
+            <button
+              type="button"
+              onClick={() => setActiveTab('admin')}
+              className={`px-3 py-1.5 rounded-lg border text-xs font-medium transition ${
+                activeTab === 'admin'
+                  ? 'bg-purple-50 border-purple-300 text-purple-800 font-semibold'
+                  : 'bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100'
+              }`}
+            >
+              {isTamil ? 'நிர்வாக கன்சோல் (RBAC)' : 'Admin Console (RBAC)'}
+            </button>
+          )}
+
+          {user.role === 'HOSPITAL_DOCTOR' && (
             <button
               type="button"
               onClick={() => setActiveTab('referrals')}
@@ -163,7 +185,7 @@ export const RoleWorkspaceBar: React.FC<RoleWorkspaceBarProps> = ({
             </button>
           )}
 
-          {user.role === 'HEALTH_WORKER' && (
+          {user.role === 'ASHA_WORKER' && (
             <button
               type="button"
               onClick={() => setActiveTab('triage')}
